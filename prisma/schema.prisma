@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int       @id @default(autoincrement())
+  name             String
+  phone            String?
+  email            String    @unique
+  ads              Ad[]
+  auctions         Auction[]
+  bids             Bid[]
+  favoriteAds      Ad[]      @relation("FavoriteAds")
+  favoriteAuctions Auction[] @relation("FavoriteAuctions")
+}
+
+model Ad {
+  id          Int      @id @default(autoincrement())
+  publishedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  price       Int?
+  image_URL   String?
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  favoritedBy User[]   @relation("FavoriteAds")
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  ads      Ad[]
+  auctions Auction[]
+}
+
+model Auction {
+  id           Int      @id @default(autoincrement())
+  publishedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  title        String
+  description  String?
+  image_URL    String?
+  deadlineTime DateTime
+  author       User     @relation(fields: [authorId], references: [id])
+  authorId     Int
+  category     Category @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+  favoritedBy  User[]   @relation("FavoriteAuctions")
+  bids         Bid[]
+}
+
+model Bid {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  createdAt DateTime @default(now())
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  auctionId Int
+  bidder    User     @relation(fields: [bidderId], references: [id])
+  bidderId  Int
+}
