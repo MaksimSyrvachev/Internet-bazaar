@@ -1,5 +1,15 @@
-import Image from "next/image";
+'use client';
+
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 
 export default function Home() {
-  return <main>dfdsfs</main>;
+
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/home');
+  }, []);
+
+  return null;
 }
