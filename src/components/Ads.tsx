@@ -1,8 +1,9 @@
 'use client';
 
 
-import {useContext, useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {CategorySelectedContext, FilterSearchContext} from "@/components/Providers";
+import {Ad} from "@/components/Ad";
 
 export const Ads = () => {
 
@@ -19,7 +20,7 @@ export const Ads = () => {
 
 	return(
 		<div>
-			INZERATY
+			{[1,1,1,1,1,1,1,1,1,1,1,1].map(_ => <Ad key="a"/>)}
 		</div>
 	);
 }

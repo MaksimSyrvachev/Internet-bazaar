@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
 		<body className={`${inter.className}`}>
 			<Providers>
 				<Navigation>
-					<div className="container mx-auto mt-1">{children}</div>
+					{children}
 				</Navigation>
 			</Providers>
 		</body>
