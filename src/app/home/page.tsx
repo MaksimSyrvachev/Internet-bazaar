@@ -1,5 +1,15 @@
-import Image from 'next/image';
+import React from "react";
+import {LeftFilter} from "@/components/LeftFilter";
+import {Ads} from "@/components/Ads";
 
-const Home = () => <main>dfdsfs</main>;
+export default function Home() {
 
-export default Home;
+  return (
+      <div className="flex">
+        <div className="w-1/6">
+          <LeftFilter/>
+        </div>
+        <Ads/>
+      </div>
+  )
+}
