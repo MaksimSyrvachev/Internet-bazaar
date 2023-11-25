@@ -1,5 +1,5 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-export default function Home() {
-  return <main>dfdsfs</main>;
-}
+const Home = () => <main>dfdsfs</main>;
+
+export default Home;
