@@ -4,6 +4,7 @@
 import React, {useContext, useEffect} from "react";
 import {CategorySelectedContext, FilterSearchContext} from "@/components/Providers";
 import {Ad} from "@/components/Ad";
+import {randomUUID} from "crypto";
 
 export const Ads = () => {
 
@@ -18,9 +19,11 @@ export const Ads = () => {
 		console.log(searchFilter)
 	}, [searchFilter]);
 
+	const crypto = require('crypto');
+
 	return(
 		<div>
-			{[1,1,1,1,1,1,1,1,1,1,1,1].map(_ => <Ad key="a"/>)}
+			{[1,1,1,1,1,1,1,1,1,1,1,1].map(_ => <Ad key={crypto.randomBytes(16).toString('hex')}/>)}
 		</div>
 	);
 }

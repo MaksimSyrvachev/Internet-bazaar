@@ -8,6 +8,7 @@ import { useState } from 'react';
 import TopNavigationButton from '@/components/TopNavigationButton';
 
 import logo from '../../public/logo.jpg';
+import ProfileSignInOut from "@/components/ProfileSignInOut";
 
 export const TopNavigation = () => {
 	const router = useRouter();
@@ -36,7 +37,7 @@ export const TopNavigation = () => {
 					<TopNavigationButton text="Auctions" path="/actions" />
 					<TopNavigationButton text="My favorites" path="/my_favorites" />
 					<TopNavigationButton text="My listing" path="/my_listing" />
-					<TopNavigationButton text="Login" path="/login" />
+					<ProfileSignInOut/>
 				</div>
 			</div>
 			{showMenu && (
@@ -45,7 +46,7 @@ export const TopNavigation = () => {
 					<TopNavigationButton text="Auctions" path="/actions" />
 					<TopNavigationButton text="My favorites" path="/my_favorites" />
 					<TopNavigationButton text="My listing" path="/my_listing" />
-					<TopNavigationButton text="Login" path="/login" />
+					<ProfileSignInOut/>
 				</div>
 			)}
 		</div>

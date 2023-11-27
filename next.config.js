@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    images: {
+        domains: ['cdn.discordapp.com', /* ďalšie domény, ak existujú */],
+    },
+}
 
 module.exports = nextConfig
