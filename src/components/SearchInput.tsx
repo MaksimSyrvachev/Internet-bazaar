@@ -2,7 +2,7 @@
 
 import React, {useContext} from 'react';
 import { FaSearch } from 'react-icons/fa';
-import {FilterSearchContext, ShowCategoriesSearchContext} from "@/components/Providers";
+import {FilterSearchContext} from "@/components/Providers";
 import {useForm} from "react-hook-form";
 
 type FilterInputType = {
@@ -15,30 +15,13 @@ const SearchInput = () => {
 	const methods = useForm<FilterInputType>();
 	const inputValue = methods.watch('input')
 
-	const [showLeftFilter, setShowLeftFilter] = useContext(ShowCategoriesSearchContext)
-
 	React.useEffect(() => {
 		setFilterSearch(inputValue);
 	}, [inputValue]);
 
 	return (
 		<div>
-			{showLeftFilter &&
-			<div className="p-3 md:hidden">
-				<div className="flex md:hidden items-center justify-center bg-white shadow-md rounded-md">
-					<input
-						className="w-full ps-1 rounded-l-md focus:outline-none"
-						type="search"
-						placeholder="Search..."
-						{...methods.register("input")}
-					/>
-					<div className="p-2 bg-gray-200 rounded-r-md">
-						<FaSearch />
-					</div>
-				</div>
-			</div>
-			}
-			<div className="hidden md:flex items-center justify-center bg-white shadow-md rounded-md">
+			<div className="flex items-center justify-center bg-white shadow-md rounded-md">
 				<input
 					className="w-full ps-1 rounded-l-md focus:outline-none"
 					type="search"
