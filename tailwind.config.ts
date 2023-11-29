@@ -13,6 +13,7 @@ const config: Config = {
         'colorOnPrimary': '#FFFBFF',
         'hoverPrimary': '#D3AB9E',
         'selectedPrimary': '#debfb7',
+        'adBackground': '#f6f1ef',
       },
     },
   },

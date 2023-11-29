@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const adSchema = z.object({
+export const adSchema = z.object({
 	id: z.string(),
 	title: z
 		.string()
@@ -24,3 +24,5 @@ export const postAdSchema = adSchema.omit({ id: true });
 export const putAdSchema = adSchema.omit({ authorId: true, categoryId: true });
 
 export const deleteAdSchema = adSchema.pick({ id: true });
+
+export type Ad = z.infer<typeof adSchema>;
