@@ -1,19 +1,19 @@
-"use client"
+'use client';
 
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import {FilterSearchContext} from "@/components/Providers";
-import {useForm} from "react-hook-form";
+import { useForm } from 'react-hook-form';
+
+import { FilterSearchContext } from '@/components/Providers';
 
 type FilterInputType = {
-	input: string
-}
+	input: string;
+};
 
 const SearchInput = () => {
-
-	const [_, setFilterSearch] = useContext(FilterSearchContext)
+	const [_, setFilterSearch] = useContext(FilterSearchContext);
 	const methods = useForm<FilterInputType>();
-	const inputValue = methods.watch('input')
+	const inputValue = methods.watch('input');
 
 	React.useEffect(() => {
 		setFilterSearch(inputValue);
@@ -21,14 +21,14 @@ const SearchInput = () => {
 
 	return (
 		<div>
-			<div className="flex items-center justify-center bg-white shadow-md rounded-md">
+			<div className="flex items-center justify-center rounded-md bg-white shadow-md">
 				<input
-					className="w-full ps-1 rounded-l-md focus:outline-none"
+					className="w-full rounded-l-md ps-1 focus:outline-none"
 					type="search"
 					placeholder="Search..."
-					{...methods.register("input")}
+					{...methods.register('input')}
 				/>
-				<div className="p-2 bg-gray-200 rounded-r-md">
+				<div className="rounded-r-md bg-gray-200 p-2">
 					<FaSearch />
 				</div>
 			</div>

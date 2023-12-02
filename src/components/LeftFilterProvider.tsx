@@ -1,11 +1,11 @@
 'use client';
 
-import {PropsWithChildren, useState} from "react";
-import {ShowCategoriesSearchContext} from "@/components/Providers";
+import { type PropsWithChildren, useState } from 'react';
 
-export const LeftFilterProvider = ({ children}: PropsWithChildren) => {
+import { ShowCategoriesSearchContext } from '@/components/Providers';
 
-	const methods = useState<boolean>(true)
+export const LeftFilterProvider = ({ children }: PropsWithChildren) => {
+	const methods = useState<boolean>(true);
 
 	return (
 		<ShowCategoriesSearchContext.Provider value={methods}>

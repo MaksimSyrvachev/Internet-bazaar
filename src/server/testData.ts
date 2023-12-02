@@ -1,7 +1,3 @@
-import { promises as fs } from 'fs';
-
-import z from 'zod';
-
 // NOTE: You can edit this value while developing
 const SLEEP_TIME_MS = 1500;
 
@@ -15,7 +11,7 @@ const sleep = () => new Promise(resolve => setTimeout(resolve, SLEEP_TIME_MS));
  */
 export const getCategories = async () => {
 	try {
-		const data = ["Car", "Toys", "Mobile"]
+		const data = ['Car', 'Toys', 'Mobile'];
 		await sleep();
 
 		return data;

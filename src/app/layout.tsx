@@ -16,9 +16,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
 	<html lang="en">
 		<body className={`${inter.className}`}>
 			<Providers>
-				<Navigation>
-					{children}
-				</Navigation>
+				<Navigation>{children}</Navigation>
 			</Providers>
 		</body>
 	</html>

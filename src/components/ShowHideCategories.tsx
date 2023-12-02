@@ -1,16 +1,20 @@
 'use client';
 
+import { useContext } from 'react';
 
-import {useContext} from "react";
-import {ShowCategoriesSearchContext} from "@/components/Providers";
+import { ShowCategoriesSearchContext } from '@/components/Providers';
 
 export const ShowHIdeCategories = () => {
+	const [showLeftFilter, setShowLeftFilter] = useContext(
+		ShowCategoriesSearchContext
+	);
 
-	const [showLeftFilter, setShowLeftFilter] = useContext(ShowCategoriesSearchContext)
-
-	return(
-		<button className="underline ms-5" onClick={() => setShowLeftFilter(!showLeftFilter)}>
-			{showLeftFilter ? "Hide categories" : "Show categories"}
+	return (
+		<button
+			className="ms-5 underline"
+			onClick={() => setShowLeftFilter(!showLeftFilter)}
+		>
+			{showLeftFilter ? 'Hide categories' : 'Show categories'}
 		</button>
 	);
-}
+};

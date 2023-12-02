@@ -1,29 +1,30 @@
 'use client';
 
+import React, { useContext, useEffect } from 'react';
 
-import React, {useContext, useEffect} from "react";
-import {CategorySelectedContext, FilterSearchContext} from "@/components/Providers";
-import {Ad} from "@/components/Ad";
-import {randomUUID} from "crypto";
+import {
+	CategorySelectedContext,
+	FilterSearchContext
+} from '@/components/Providers';
+import { Ad } from '@/components/Ad';
 
 export const Ads = () => {
-
-	const [categorySelect, _] = useContext(CategorySelectedContext)
-	const [searchFilter, __] = useContext(FilterSearchContext)
+	const [categorySelect, _] = useContext(CategorySelectedContext);
+	const [searchFilter, __] = useContext(FilterSearchContext);
 
 	useEffect(() => {
-		console.log(categorySelect)
+		console.log(categorySelect);
 	}, [categorySelect]);
 
 	useEffect(() => {
-		console.log(searchFilter)
+		console.log(searchFilter);
 	}, [searchFilter]);
 
-	const crypto = require('crypto');
-
-	return(
+	return (
 		<div>
-			{[1,1,1,1,1,1,1,1,1,1,1,1].map(_ => <Ad key={crypto.randomBytes(16).toString('hex')}/>)}
+			{[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(_ => (
+				<Ad key={Math.random()} />
+			))}
 		</div>
 	);
-}
+};

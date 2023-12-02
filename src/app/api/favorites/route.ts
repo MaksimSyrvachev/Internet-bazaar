@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { db } from '@/server/db';
-import {putFavoriteSchema} from "@/validators/favorite";
+import { putFavoriteSchema } from '@/validators/favorite';
 
 export const GET = async (request: Request) => {
 	const { searchParams } = new URL(request.url);
@@ -29,11 +29,10 @@ export const GET = async (request: Request) => {
 			}
 		});
 		const ads = user?.favoriteAds ?? [];
-		const auctions= user?.favoriteAuctions ?? [];
+		const auctions = user?.favoriteAuctions ?? [];
 		return Response.json([...ads, ...auctions]);
 	}
 };
-
 
 export const DELETE = async (request: Request) => {
 	const req = await request.json();
@@ -47,19 +46,19 @@ export const DELETE = async (request: Request) => {
 			},
 			data: result.data.adId
 				? {
-					favoriteAds: {
-						disconnect: {
-							id: result.data.adId
+						favoriteAds: {
+							disconnect: {
+								id: result.data.adId
+							}
 						}
-					}
-				}
+				  }
 				: {
-					favoriteAuctions: {
-						disconnect: {
-							id: result.data.auctionId
+						favoriteAuctions: {
+							disconnect: {
+								id: result.data.auctionId
+							}
 						}
-					}
-				}
+				  }
 		});
 		return Response.json(updatedUser);
 	}
@@ -77,18 +76,17 @@ export const PUT = async (request: Request) => {
 			},
 			data: result.data.adId
 				? {
-					favoriteAds: {
-						connect: [{ id: result.data.adId }]
-					}
-				}
+						favoriteAds: {
+							connect: [{ id: result.data.adId }]
+						}
+				  }
 				: {
-					favoriteAuctions: {
-						connect: [{ id: result.data.auctionId }]
-					}
-				}
+						favoriteAuctions: {
+							connect: [{ id: result.data.auctionId }]
+						}
+				  }
 		});
 
 		return Response.json(updatedUser);
 	}
 };
-

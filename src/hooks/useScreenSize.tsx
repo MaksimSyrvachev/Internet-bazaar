@@ -1,31 +1,29 @@
-"use client"
+'use client';
 
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 const useScreenSize = () => {
+	const [screenSize, setScreenSize] = useState({
+		width: 1000,
+		height: 1000
+	});
 
-    const [screenSize, setScreenSize] = useState({
-        width: 1000,
-        height: 1000,
-    });
+	useEffect(() => {
+		const handleResize = () => {
+			setScreenSize({
+				width: window.innerWidth,
+				height: window.innerHeight
+			});
+		};
 
-    useEffect(() => {
-        const handleResize = () => {
-            setScreenSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        };
+		window.addEventListener('resize', handleResize);
 
-        window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
 
-        // Clean up the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    return screenSize;
+	return screenSize;
 };
 
 export default useScreenSize;
