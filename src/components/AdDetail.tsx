@@ -66,7 +66,7 @@ export const AdDetail = (props: Props) => {
 							<b>Last updated</b>: props.ad.lastUpdated
 						</div>
 					</div>
-					{jeVlastnik || (
+					{jeVlastnik && (
 						<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
 							<button
 								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
