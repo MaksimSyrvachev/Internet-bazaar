@@ -6,6 +6,8 @@ import { type User } from '.prisma/client';
 import { useSession } from 'next-auth/react';
 
 import { type Ad as AdModel } from '@/validators/ads';
+import { DeleteItemDialog } from '@/components/DeleteItemDialog';
+import { ItemEnum } from '@/model/ItemEnum';
 
 type Props = {
 	ad?: AdModel;
@@ -74,12 +76,7 @@ export const AdDetail = (props: Props) => {
 							>
 								Edit
 							</button>
-							<button
-								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
-								onClick={() => console.log('Delete dialog')}
-							>
-								Delete
-							</button>
+							<DeleteItemDialog id={props.ad?.id} itemEnum={ItemEnum.Ad} />
 						</div>
 					)}
 				</div>
