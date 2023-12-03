@@ -7,6 +7,7 @@ import {
 	useContext,
 	useState
 } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type CategorySelectedContextState = [
 	string | null,
@@ -17,6 +18,8 @@ type FilterSearchContextState = [
 	(filterSearch: string) => void
 ];
 type ShowCategoriesContextState = [boolean, (filterSearch: boolean) => void];
+
+const queryClient = new QueryClient();
 
 export const CategorySelectedContext =
 	createContext<CategorySelectedContextState>(undefined as never);
@@ -38,11 +41,13 @@ export const Providers = ({ children }: PropsWithChildren) => {
 
 	return (
 		<SessionProvider>
-			<CategorySelectedContext.Provider value={categorySelectedState}>
-				<FilterSearchContext.Provider value={filterSearchState}>
-					{children}
-				</FilterSearchContext.Provider>
-			</CategorySelectedContext.Provider>
+			<QueryClientProvider client={queryClient}>
+				<CategorySelectedContext.Provider value={categorySelectedState}>
+					<FilterSearchContext.Provider value={filterSearchState}>
+						{children}
+					</FilterSearchContext.Provider>
+				</CategorySelectedContext.Provider>
+			</QueryClientProvider>
 		</SessionProvider>
 	);
 };

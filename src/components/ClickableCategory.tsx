@@ -3,9 +3,10 @@
 import { useContext } from 'react';
 
 import { CategorySelectedContext } from '@/components/Providers';
+import { Category } from '@/types/categories';
 
 type Props = {
-	category: string;
+	category: Category;
 };
 
 const ClickableCategory = (props: Props) => {
@@ -14,9 +15,9 @@ const ClickableCategory = (props: Props) => {
 	return (
 		<button
 			className="underline"
-			onClick={() => setCategorySelected(props.category)}
+			onClick={() => setCategorySelected(props.category.id)}
 		>
-			{props.category}
+			{props.category.name}
 		</button>
 	);
 };

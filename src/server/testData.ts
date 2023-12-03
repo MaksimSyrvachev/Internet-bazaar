@@ -1,21 +1,10 @@
-// NOTE: You can edit this value while developing
-const SLEEP_TIME_MS = 1500;
+import { type Category } from '@/types/categories';
 
-/**
- * Simulates a slower network or BE processing time
- */
-const sleep = () => new Promise(resolve => setTimeout(resolve, SLEEP_TIME_MS));
+import { db } from './db';
 
-/**
- * Reads the movie types from the JSON file
- */
 export const getCategories = async () => {
-	try {
-		const data = ['Car', 'Toys', 'Mobile'];
-		await sleep();
-
-		return data;
-	} catch (error) {
-		return [];
-	}
+	const categories = await db.category.findMany();
+	const all = { id: 'all', name: 'All Categories' };
+	categories.unshift(all);
+	return categories as Category[];
 };

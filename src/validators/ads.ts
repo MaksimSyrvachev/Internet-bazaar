@@ -9,20 +9,39 @@ export const adSchema = z.object({
 	description: z
 		.string()
 		.max(500, { message: 'Description must be 500 or fewer characters long' })
-		.optional(),
+		.nullable(),
 	price: z
 		.number()
-		.nonnegative('Price must not be a negative number')
-		.optional(),
-	image_URL: z.string().optional(),
+		.int()
+		.nonnegative({ message: 'Price must not be a negative number' })
+		.nullable(),
+	updatedAt: z.string(),
+	publishedAt: z.string(),
+	image_URL: z.string().nullable(),
 	authorId: z.string(),
 	categoryId: z.string()
 });
 
-export const postAdSchema = adSchema.omit({ id: true });
+export const validationGetAdsShema = z.array(adSchema);
 
-export const putAdSchema = adSchema.omit({ authorId: true, categoryId: true });
+export const adFormSchema = adSchema.omit({
+	id: true,
+	authorId: true,
+	updatedAt: true,
+	publishedAt: true
+});
+
+export const postAdSchema = adSchema.omit({
+	id: true,
+	updatedAt: true,
+	publishedAt: true
+});
+
+export const putAdSchema = adSchema.omit({
+	authorId: true,
+	categoryId: true,
+	updatedAt: true,
+	publishedAt: true
+});
 
 export const deleteAdSchema = adSchema.pick({ id: true });
-
-export type Ad = z.infer<typeof adSchema>;

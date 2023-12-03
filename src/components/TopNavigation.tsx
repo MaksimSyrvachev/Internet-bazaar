@@ -34,7 +34,7 @@ export const TopNavigation = () => {
 				</div>
 				<div className="hidden items-center lg:flex">
 					<TopNavigationButton text="Home" path="/home" />
-					<TopNavigationButton text="Auctions" path="/actions" />
+					<TopNavigationButton text="Auctions" path="/auctions" />
 					<TopNavigationButton text="My favorites" path="/my_favorites" />
 					<TopNavigationButton text="My listing" path="/my_listing" />
 					<ProfileSignInOut />
@@ -43,7 +43,7 @@ export const TopNavigation = () => {
 			{showMenu && (
 				<div className="flex flex-col items-center lg:hidden">
 					<TopNavigationButton text="Home" path="/home" />
-					<TopNavigationButton text="Auctions" path="/actions" />
+					<TopNavigationButton text="Auctions" path="/auctions" />
 					<TopNavigationButton text="My favorites" path="/my_favorites" />
 					<TopNavigationButton text="My listing" path="/my_listing" />
 					<ProfileSignInOut />

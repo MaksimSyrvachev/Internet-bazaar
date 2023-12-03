@@ -87,7 +87,7 @@ model Auction {
   title        String
   description  String?
   image_URL    String?
-  deadlineTime Int
+  deadlineTime BigInt
   author       User     @relation(fields: [authorId], references: [id])
   authorId     String
   category     Category @relation(fields: [categoryId], references: [id])

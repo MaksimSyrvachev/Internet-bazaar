@@ -1,11 +1,10 @@
-import React, { Suspense } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 
-import { LeftFilter } from '@/components/LeftFilter';
-import { Ads } from '@/components/Ads';
-import { LeftFilterProvider } from '@/components/LeftFilterProvider';
 import { CategoriesFetch } from '@/components/CategoriesFetch';
+import { LeftFilter } from '@/components/LeftFilter';
+import { LeftFilterProvider } from '@/components/LeftFilterProvider';
 
-const Home = () => (
+const Layout = ({ children }: PropsWithChildren) => (
 	<LeftFilterProvider>
 		<div className="w-full">
 			<div className="md:flex md:space-x-2">
@@ -14,12 +13,10 @@ const Home = () => (
 						<CategoriesFetch />
 					</Suspense>
 				</div>
-				<div className="md:flex-grow">
-					<Ads />
-				</div>
+				<div className="md:flex-grow">{children}</div>
 			</div>
 		</div>
 	</LeftFilterProvider>
 );
 
-export default Home;
+export default Layout;

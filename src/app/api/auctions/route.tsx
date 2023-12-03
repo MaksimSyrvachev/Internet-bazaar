@@ -12,7 +12,11 @@ export const GET = async () => {
 			}
 		}
 	});
-	return Response.json(auctions);
+	const resultAuctions = auctions.map(auction => ({
+		...auction,
+		deadlineTime: String(auction.deadlineTime)
+	}));
+	return Response.json(resultAuctions);
 };
 
 export const POST = async (request: Request) => {
@@ -21,19 +25,23 @@ export const POST = async (request: Request) => {
 	if (!result.success) {
 		throw new Error('Invalid data from front-end');
 	} else {
+		const resAuction = {
+			...result.data,
+			deadlineTime: Number(result.data.deadlineTime)
+		};
 		const newAuction = await db.auction.create({
 			data: {
-				title: result.data.title,
-				description: result.data.description,
-				image_URL: result.data.image_URL,
-				deadlineTime: result.data.deadlineTime,
-				authorId: result.data.authorId,
-				categoryId: result.data.categoryId,
+				title: resAuction.title,
+				description: resAuction.description,
+				image_URL: resAuction.image_URL,
+				deadlineTime: resAuction.deadlineTime,
+				authorId: resAuction.authorId,
+				categoryId: resAuction.categoryId,
 				bids: {
 					create: [
 						{
-							amount: result.data.createBidSchema.amount,
-							bidderId: result.data.createBidSchema.bidderId
+							amount: resAuction.createBidSchema.amount,
+							bidderId: resAuction.createBidSchema.bidderId
 						}
 					]
 				}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import SearchInput from '@/components/SearchInput';
 import { ShowCategoriesSearchContext } from '@/components/Providers';
@@ -8,18 +8,20 @@ import Spinner from '@/components/Spinner';
 import { ShowHIdeCategories } from '@/components/ShowHideCategories';
 import ClickableCategory from '@/components/ClickableCategory';
 import useScreenSize from '@/hooks/useScreenSize';
+import { type Category } from '@/types/categories';
 
 type Props = {
-	categories?: string[];
+	categories?: Category[];
 };
 
-export const LeftFilter = (props: Props) => {
+//TODO use Suspense and fallback for loading
+export const LeftFilter = ({ categories }: Props) => {
 	const [showLeftFilter, setShowFilter] = useContext(
 		ShowCategoriesSearchContext
 	);
 	const screenSize = useScreenSize();
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (screenSize.width >= 768) {
 			setShowFilter(true);
 		} else {
@@ -27,7 +29,7 @@ export const LeftFilter = (props: Props) => {
 		}
 	}, [screenSize]);
 
-	if (props.categories === undefined) {
+	if (categories === undefined) {
 		return (
 			<div>
 				<div className="block md:hidden">
@@ -58,8 +60,11 @@ export const LeftFilter = (props: Props) => {
 						<SearchInput />
 					</div>
 					<div className="flex-col bg-primaryBackground p-5">
-						{props.categories.map(category => (
-							<div className="flex items-center justify-center" key={category}>
+						{categories.map(category => (
+							<div
+								className="flex items-center justify-center"
+								key={category.id}
+							>
 								<ClickableCategory category={category} />
 							</div>
 						))}
