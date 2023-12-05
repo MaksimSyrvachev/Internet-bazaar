@@ -1,12 +1,13 @@
 import { STATUS_CODES } from 'http';
 
 import { type SendingEmail } from '@/types/sendingEmail';
+import { type AdPost } from '@/types/ads';
 
-export const sendEmail = async (email: SendingEmail) => {
-	const response = await fetch(`/api/emaila`, {
+export const createAd = async (ad: AdPost) => {
+	const response = await fetch(`/api/ads`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(email)
+		body: JSON.stringify(ad)
 	});
 
 	if (response.status === 200) {

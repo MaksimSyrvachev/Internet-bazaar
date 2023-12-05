@@ -45,3 +45,8 @@ export const putAdSchema = adSchema.omit({
 });
 
 export const deleteAdSchema = adSchema.pick({ id: true });
+
+export const editAdSchema = adSchema.omit({
+	updatedAt: true,
+	publishedAt: true
+});
