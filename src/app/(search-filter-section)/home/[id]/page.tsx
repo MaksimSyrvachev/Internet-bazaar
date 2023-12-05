@@ -14,7 +14,6 @@ type IdPageProps = {
 };
 
 const IdPage = ({ params }: IdPageProps) => {
-	//TODO fetch data
 	const { data: ad, isPending, error } = useAd(params.id);
 
 	const {

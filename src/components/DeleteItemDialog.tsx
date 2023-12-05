@@ -1,23 +1,37 @@
 'use client';
 
 import { useRef } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 import { type ItemEnum } from '@/model/ItemEnum';
+import { deleteAd } from '@/fetch/deleteAd';
+import Spinner from '@/components/Spinner';
 
 type Props = {
-	id: string | undefined;
+	id: string;
 	itemEnum: ItemEnum;
 };
 export const DeleteItemDialog = (props: Props) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
+	const router = useRouter();
 
 	const onDeleteOpenButton = () => {
 		dialogRef.current?.showModal();
 	};
 
+	const methods = useMutation({ mutationFn: deleteAd });
+
 	const onApproval = () => {
-		// todo delete item
-		dialogRef.current?.close();
+		methods.mutate(props.id, {
+			onSuccess: _ => {
+				dialogRef.current?.close();
+				router.replace(`/home`);
+			},
+			onError: () => {
+				alert('There was an error');
+			}
+		});
 	};
 
 	return (
@@ -41,6 +55,11 @@ export const DeleteItemDialog = (props: Props) => {
 							Yes
 						</button>
 					</div>
+					{methods.isPending && (
+						<div className="flex items-center justify-center p-2">
+							<Spinner />
+						</div>
+					)}
 				</div>
 			</dialog>
 			<button

@@ -18,3 +18,20 @@ export const GET = async (
 
 	return Response.json(ad);
 };
+
+export const DELETE = async (
+	_: Request,
+	{ params }: { params: { id: string } }
+) => {
+	const ad = await db.ad.delete({
+		where: {
+			id: params.id
+		}
+	});
+
+	if (ad === undefined || ad === null) {
+		return notFound();
+	}
+
+	return new Response(null, { status: 200 });
+};
