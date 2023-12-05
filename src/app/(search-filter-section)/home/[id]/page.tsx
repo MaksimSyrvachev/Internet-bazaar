@@ -1,8 +1,11 @@
+'use client';
+
 import { type User } from '.prisma/client';
-import { loremIpsum } from 'react-lorem-ipsum';
 
 import { AdDetail } from '@/components/AdDetail';
-import { type Ad } from '@/validators/ads';
+import { useAd } from '@/hooks/useAd';
+import Spinner from '@/components/Spinner';
+import { useUser } from '@/hooks/useUser';
 
 type IdPageProps = {
 	params: {
@@ -12,28 +15,34 @@ type IdPageProps = {
 
 const IdPage = ({ params }: IdPageProps) => {
 	//TODO fetch data
-	const ad: Ad = {
-		title: 'TEsting Ad',
-		description: loremIpsum()[0],
-		authorId: 'a',
-		categoryId: 'a',
-		id: 'Q',
-		image_URL: 'https://picsum.photos/seed/picsum/200/300',
-		price: 89
-	};
+	const { data: ad, isPending, error } = useAd(params.id);
 
-	const author: User = {
-		id: 'a',
-		name: 'testing',
-		phone: 'aaaaaa',
-		email: 'AAAAAAAA',
-		emailVerified: null,
-		image: null
-	};
+	const {
+		data: user,
+		isPending: isPendingUser,
+		error: errorUser
+	} = useUser(ad?.authorId);
+
+	if (isPending || isPendingUser) {
+		return (
+			<div className="flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
+	}
+
+	if (error !== null || errorUser !== null) {
+		console.log(user);
+		return (
+			<div className="flex items-center justify-center">
+				Some error has occured
+			</div>
+		);
+	}
 
 	return (
 		<div className="w-full pe-10 ps-10">
-			<AdDetail ad={ad} author={author} />
+			<AdDetail ad={ad} author={user} />
 		</div>
 	);
 };

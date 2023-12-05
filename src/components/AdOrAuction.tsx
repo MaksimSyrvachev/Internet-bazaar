@@ -1,11 +1,12 @@
 'use client';
 
 import { CiHeart } from 'react-icons/ci';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 import { type Ad as AdModel } from '@/types/ads';
 import { type AuctionWithBid as AuctionModel } from '@/types/auctions';
-
-import { AuctionTimeLeft } from './AuctionTimeLeft';
+import { AuctionTimeLeft } from '@/components/AuctionTimeLeft';
 
 type Props = {
 	ad?: AdModel;
@@ -13,11 +14,21 @@ type Props = {
 };
 
 export const AdOrAuction = (props: Props) => {
+	const router = useRouter();
 	const handleCklickFavourite = () => {
 		console.log('sds');
 	};
+
+	const onItemClick = () => {
+		if (props.ad !== undefined) {
+			router.replace(`/home/${props.ad.id}`);
+		} else if (props.auction !== undefined) {
+			router.replace(`/auction/${props.auction.id}`);
+		}
+	};
+
 	return (
-		<div className="m-2 flex border-2 p-2  hover:bg-adBackground">
+		<div className="m-2 flex border-2 p-2 hover:bg-adBackground">
 			<div className="flex w-1/12 items-center justify-center">
 				<div>{props.ad ? props.ad.image_URL : props.auction?.image_URL}</div>
 			</div>
@@ -54,6 +65,14 @@ export const AdOrAuction = (props: Props) => {
 					</div>
 				</div>
 			)}
+			<div>
+				<button
+					className="rounded-2xl underline hover:bg-selectedPrimary"
+					onClick={onItemClick}
+				>
+					See details
+				</button>
+			</div>
 		</div>
 	);
 };

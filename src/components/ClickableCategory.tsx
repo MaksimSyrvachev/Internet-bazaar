@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 
 import { CategorySelectedContext } from '@/components/Providers';
-import { Category } from '@/types/categories';
+import { type Category } from '@/types/categories';
 
 type Props = {
 	category: Category;

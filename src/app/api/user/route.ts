@@ -23,7 +23,7 @@ export const PUT = async (request: Request) => {
 		throw new Error('Invalid data from front-end');
 	} else {
 		const updatedUser = await db.user.update({
-			where: { id: result.data.userId },
+			where: { id: result.data.id },
 			data: { phone: result.data.phone, name: result.data.name }
 		});
 		return Response.json(updatedUser);

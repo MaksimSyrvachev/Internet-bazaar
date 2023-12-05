@@ -2,15 +2,17 @@
 
 import Image from 'next/image';
 import { FaHeart } from 'react-icons/fa';
-import { type User } from '.prisma/client';
 import { useSession } from 'next-auth/react';
 
-import { type Ad as AdModel } from '@/validators/ads';
 import { DeleteItemDialog } from '@/components/DeleteItemDialog';
 import { ItemEnum } from '@/model/ItemEnum';
+import { EditCreateItemDialog } from '@/components/EditCreateItemDialog';
+import { ContactSellerDialog } from '@/components/ContactSellerDialog';
+import { type Ad } from '@/types/ads';
+import { type User } from '@/types/user';
 
 type Props = {
-	ad?: AdModel;
+	ad: Ad;
 	author: User;
 };
 
@@ -32,7 +34,7 @@ export const AdDetail = (props: Props) => {
 			<div className="gap-2 p-4 text-xl md:flex">
 				<div className="flex items-center justify-center md:w-1/4">
 					<div className="w-2/5 md:w-2/3">
-						{props.ad?.image_URL !== undefined && (
+						{props.ad?.image_URL !== null && (
 							<Image
 								src={props.ad?.image_URL}
 								width="100"
@@ -52,12 +54,10 @@ export const AdDetail = (props: Props) => {
 							<b>Price</b>: {props.ad?.price} €
 						</div>
 						{jeVlastnik || (
-							<button
-								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
-								onClick={() => console.log('Open dialog')}
-							>
-								Contact seller
-							</button>
+							<ContactSellerDialog
+								sellerEmail={props.author.email!}
+								item={props.ad}
+							/>
 						)}
 					</div>
 					<div className="items-center justify-center gap-2 md:items-center md:justify-start lg:flex">
@@ -65,17 +65,13 @@ export const AdDetail = (props: Props) => {
 							<b>Seller</b>: {props.author.name}
 						</div>
 						<div className="flex items-center justify-center md:items-center md:justify-start">
-							<b>Last updated</b>: props.ad.lastUpdated
+							<b>Last updated</b>:{' '}
+							{new Date(props.ad.updatedAt).toLocaleString()}
 						</div>
 					</div>
 					{jeVlastnik && (
 						<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
-							<button
-								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
-								onClick={() => console.log('Edit dialog')}
-							>
-								Edit
-							</button>
+							<EditCreateItemDialog item={props.ad} />
 							<DeleteItemDialog id={props.ad?.id} itemEnum={ItemEnum.Ad} />
 						</div>
 					)}
