@@ -136,8 +136,8 @@ export const CreateEditProvider = ({ children, ad }: Props) => {
 								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
 								onClick={() => {
 									dialogRef.current?.close();
-									methods.reset();
 								}}
+								type="button"
 							>
 								Cancel
 							</button>
@@ -156,7 +156,7 @@ export const CreateEditProvider = ({ children, ad }: Props) => {
 					className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
 					onClick={onOpenButton}
 				>
-					Create ad
+					{ad === undefined ? 'Create ad' : 'Edit ad'}
 				</button>
 			</FormProvider>
 		</div>

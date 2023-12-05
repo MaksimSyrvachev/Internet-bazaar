@@ -1,11 +1,7 @@
-'use client';
-
-import { type User } from '.prisma/client';
-
 import { AdDetail } from '@/components/AdDetail';
-import { useAd } from '@/hooks/useAd';
-import Spinner from '@/components/Spinner';
-import { useUser } from '@/hooks/useUser';
+import { getAdById } from '@/server/ads';
+import { getUserById } from '@/server/user';
+import { EditCreateItemDialog } from '@/components/EditCreateItemDialog';
 
 type IdPageProps = {
 	params: {
@@ -13,35 +9,42 @@ type IdPageProps = {
 	};
 };
 
-const IdPage = ({ params }: IdPageProps) => {
-	const { data: ad, isPending, error } = useAd(params.id);
-
-	const {
-		data: user,
-		isPending: isPendingUser,
-		error: errorUser
-	} = useUser(ad?.authorId);
-
-	if (isPending || isPendingUser) {
-		return (
-			<div className="flex items-center justify-center">
-				<Spinner />
-			</div>
-		);
+const IdPage = async ({ params }: IdPageProps) => {
+	const ad = await getAdById(params.id);
+	if (ad === null) {
+		throw new Error();
+	}
+	const user = await getUserById(ad.authorId);
+	if (user === null) {
+		throw new Error();
 	}
 
-	if (error !== null || errorUser !== null) {
-		console.log(user);
-		return (
-			<div className="flex items-center justify-center">
-				Some error has occured
-			</div>
-		);
-	}
+	const feAd = {
+		id: ad.id,
+		publishedAt: ad.publishedAt.toLocaleString(),
+		updatedAt: ad.updatedAt.toLocaleString(),
+		title: ad.title,
+		description: ad.description,
+		price: ad.price,
+		image_URL: ad.image_URL,
+		authorId: ad.authorId,
+		categoryId: ad.categoryId
+	};
+
+	const feUser = {
+		id: user.id,
+		name: user.name,
+		phone: user.phone,
+		emailVerified: user.emailVerified?.toLocaleString(),
+		email: user.email,
+		image: user.image
+	};
 
 	return (
 		<div className="w-full pe-10 ps-10">
-			<AdDetail ad={ad} author={user} />
+			<AdDetail ad={feAd} author={feUser}>
+				<EditCreateItemDialog ad={feAd} />
+			</AdDetail>
 		</div>
 	);
 };

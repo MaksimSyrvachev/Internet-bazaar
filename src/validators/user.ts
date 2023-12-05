@@ -9,7 +9,7 @@ export const putUserSchema = z.object({
 });
 
 export const userSchema = putUserSchema.extend({
-	emailVerified: z.boolean().nullish(),
+	emailVerified: z.string().nullish(),
 	email: z.string().nullish(),
 	image: z.string().nullish()
 });

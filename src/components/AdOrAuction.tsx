@@ -21,9 +21,11 @@ export const AdOrAuction = (props: Props) => {
 
 	const onItemClick = () => {
 		if (props.ad !== undefined) {
-			router.replace(`/home/${props.ad.id}`);
+			router.replace(`/home/${props.ad.id}?updated=${props.ad.updatedAt}`);
 		} else if (props.auction !== undefined) {
-			router.replace(`/auction/${props.auction.id}`);
+			router.replace(
+				`/auction/${props.auction.id}?updated=${props.auction.updatedAt}`
+			);
 		}
 	};
 

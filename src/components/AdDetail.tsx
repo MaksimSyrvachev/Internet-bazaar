@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { FaHeart } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
+import { type ReactNode } from 'react';
 
 import { DeleteItemDialog } from '@/components/DeleteItemDialog';
 import { ItemEnum } from '@/model/ItemEnum';
-import { EditCreateItemDialog } from '@/components/EditCreateItemDialog';
 import { ContactSellerDialog } from '@/components/ContactSellerDialog';
 import { type Ad } from '@/types/ads';
 import { type User } from '@/types/user';
@@ -14,6 +14,7 @@ import { type User } from '@/types/user';
 type Props = {
 	ad: Ad;
 	author: User;
+	children: ReactNode;
 };
 
 export const AdDetail = (props: Props) => {
@@ -71,7 +72,7 @@ export const AdDetail = (props: Props) => {
 					</div>
 					{jeVlastnik && (
 						<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
-							<EditCreateItemDialog item={props.ad} />
+							{props.children}
 							<DeleteItemDialog id={props.ad?.id} itemEnum={ItemEnum.Ad} />
 						</div>
 					)}

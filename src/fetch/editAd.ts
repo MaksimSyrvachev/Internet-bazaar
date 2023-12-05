@@ -1,10 +1,7 @@
-import { STATUS_CODES } from 'http';
-
-import { type SendingEmail } from '@/types/sendingEmail';
-import { type AdEdit, AdForm, AdPost } from '@/types/ads';
+import { type AdEdit } from '@/types/ads';
 
 export const editAd = async (ad: AdEdit) => {
-	const response = await fetch(`/api/ad`, {
+	const response = await fetch(`/api/ads`, {
 		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(ad)
