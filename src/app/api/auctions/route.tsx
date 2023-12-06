@@ -12,7 +12,7 @@ export const GET = async () => {
 			}
 		},
 		orderBy: {
-			deadlineTime: "asc"
+			deadlineTime: 'asc'
 		}
 	});
 	const resultAuctions = auctions.map(auction => ({

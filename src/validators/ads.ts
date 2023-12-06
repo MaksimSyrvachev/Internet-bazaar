@@ -17,7 +17,7 @@ export const adSchema = z.object({
 		.nullable(),
 	updatedAt: z.string(),
 	publishedAt: z.string(),
-	image_URL: z.string().nullable(),
+	image_URL: z.union([z.literal(''), z.string().trim().url()]).nullish(),
 	authorId: z.string(),
 	categoryId: z.string()
 });

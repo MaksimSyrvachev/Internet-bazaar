@@ -4,13 +4,14 @@ import { useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-import { type ItemEnum } from '@/model/ItemEnum';
+import { ItemEnum, type ItemEnum as ItemEnumType } from '@/model/ItemEnum';
 import { deleteAd } from '@/fetch/deleteAd';
 import Spinner from '@/components/Spinner';
+import { deleteAuction } from '@/fetch/deleteAuction';
 
 type Props = {
 	id: string;
-	itemEnum: ItemEnum;
+	itemEnum: ItemEnumType;
 };
 export const DeleteItemDialog = (props: Props) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -20,18 +21,31 @@ export const DeleteItemDialog = (props: Props) => {
 		dialogRef.current?.showModal();
 	};
 
-	const methods = useMutation({ mutationFn: deleteAd });
+	const methodsAd = useMutation({ mutationFn: deleteAd });
+	const methodsAuction = useMutation({ mutationFn: deleteAuction });
 
 	const onApproval = () => {
-		methods.mutate(props.id, {
-			onSuccess: _ => {
-				dialogRef.current?.close();
-				router.replace(`/home`);
-			},
-			onError: () => {
-				alert('There was an error');
-			}
-		});
+		if (props.itemEnum === ItemEnum.Ad) {
+			methodsAd.mutate(props.id, {
+				onSuccess: _ => {
+					dialogRef.current?.close();
+					router.replace(`/home`);
+				},
+				onError: () => {
+					alert('There was an error');
+				}
+			});
+		} else {
+			methodsAuction.mutate(props.id, {
+				onSuccess: _ => {
+					dialogRef.current?.close();
+					router.replace(`/my_listing`);
+				},
+				onError: () => {
+					alert('There was an error');
+				}
+			});
+		}
 	};
 
 	return (
@@ -55,7 +69,7 @@ export const DeleteItemDialog = (props: Props) => {
 							Yes
 						</button>
 					</div>
-					{methods.isPending && (
+					{methodsAd.isPending && (
 						<div className="flex items-center justify-center p-2">
 							<Spinner />
 						</div>

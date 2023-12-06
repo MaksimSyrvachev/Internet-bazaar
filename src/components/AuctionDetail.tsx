@@ -3,38 +3,48 @@
 import Image from 'next/image';
 import { FaHeart } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
-import { type ReactNode } from 'react';
+import React from 'react';
 
 import { DeleteItemDialog } from '@/components/DeleteItemDialog';
 import { ItemEnum } from '@/model/ItemEnum';
-import { ContactSellerDialog } from '@/components/ContactSellerDialog';
-import { type Ad } from '@/types/ads';
 import { type User } from '@/types/user';
+import { type AuctionWithBid } from '@/types/auctions';
+import { AuctionTimeLeft } from '@/components/AuctionTimeLeft';
+import { BidDialog } from '@/components/BidDialog';
 
 type Props = {
-	ad: Ad;
+	auction: AuctionWithBid;
 	author: User;
-	children: ReactNode;
 };
 
-export const AdDetail = (props: Props) => {
+export const AuctionDetail = (props: Props) => {
 	const { data, status } = useSession();
-	const jeVlastnik = data?.user.id === props.ad?.authorId;
+	const jeVlastnik = data?.user.id === props.auction.authorId;
 
 	return (
 		<div className="m-2 rounded-b-lg border-4 border-primaryBackground md:flex-col">
 			<div className="gap-4 p-4 md:flex">
 				<div className="flex items-center justify-center gap-2 md:w-1/2">
 					<FaHeart />
-					<h1 className="flex-grow text-4xl">{props.ad?.title}</h1>
+					<h1 className="flex-grow text-4xl">{props.auction.title}</h1>
+				</div>
+				<div className="flex flex-grow items-center justify-center pt-2 md:pt-0">
+					{new Date(props.auction.deadlineTime).getTime() >
+					new Date().getTime() ? (
+						<AuctionTimeLeft
+							deadline={new Date(props.auction.deadlineTime).getTime()}
+						/>
+					) : (
+						<p className="p-2 text-red-500">EXPIRED</p>
+					)}
 				</div>
 			</div>
 			<div className="gap-2 p-4 text-xl md:flex">
 				<div className="flex items-center justify-center md:w-1/4">
 					<div className="w-2/5 md:w-2/3">
-						{!!props.ad?.image_URL && (
+						{!!props.auction?.image_URL && (
 							<Image
-								src={props.ad?.image_URL}
+								src={props.auction.image_URL}
 								width="100"
 								height="100"
 								layout="responsive"
@@ -45,18 +55,13 @@ export const AdDetail = (props: Props) => {
 				</div>
 				<div className="flex-col space-y-2 md:w-3/4 md:flex-grow ">
 					<div className="flex items-center justify-center md:items-start md:justify-start">
-						{props.ad?.description}
+						{props.auction?.description}
 					</div>
 					<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
 						<div>
-							<b>Price</b>: {props.ad?.price} €
+							<b>Highest bid</b>: {props.auction.bids[0].amount} €
 						</div>
-						{jeVlastnik || (
-							<ContactSellerDialog
-								sellerEmail={props.author.email!}
-								item={props.ad}
-							/>
-						)}
+						{jeVlastnik || <BidDialog auction={props.auction} />}
 					</div>
 					<div className="items-center justify-center gap-2 md:items-center md:justify-start lg:flex">
 						<div className="flex items-center justify-center md:items-center md:justify-start">
@@ -64,15 +69,19 @@ export const AdDetail = (props: Props) => {
 						</div>
 						<div className="flex items-center justify-center md:items-center md:justify-start">
 							<b>Last updated</b>:{' '}
-							{new Date(props.ad.updatedAt).toLocaleString()}
+							{new Date(props.auction.bids[0].createdAt).toLocaleString()}
 						</div>
 					</div>
-					{jeVlastnik && (
-						<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
-							{props.children}
-							<DeleteItemDialog id={props.ad?.id} itemEnum={ItemEnum.Ad} />
-						</div>
-					)}
+					{jeVlastnik &&
+						new Date(props.auction.deadlineTime).getTime() <
+							new Date().getTime() && (
+							<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
+								<DeleteItemDialog
+									id={props.auction.id}
+									itemEnum={ItemEnum.Auction}
+								/>
+							</div>
+						)}
 				</div>
 			</div>
 		</div>

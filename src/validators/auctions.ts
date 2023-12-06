@@ -14,13 +14,13 @@ const auctionSchema = z.object({
 		.string()
 		.max(500, { message: 'Description must be 500 or fewer characters long' })
 		.nullable(),
-	image_URL: z.string().nullable(),
+	image_URL: z.union([z.literal(''), z.string().trim().url()]).nullish(),
 	deadlineTime: z.string(),
 	authorId: z.string(),
 	categoryId: z.string()
 });
 
-const bidSchema = z.object({
+export const bidSchema = z.object({
 	id: z.string(),
 	amount: z
 		.number()

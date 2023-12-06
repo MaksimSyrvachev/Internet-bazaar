@@ -119,6 +119,7 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 							type="text"
 							placeholder="Image URL"
 							{...methods.register('image_URL')}
+							defaultValue={undefined}
 						/>
 						{methods.formState.errors.image_URL?.message ? (
 							<p>{methods.formState.errors.image_URL.message.toString()}</p>

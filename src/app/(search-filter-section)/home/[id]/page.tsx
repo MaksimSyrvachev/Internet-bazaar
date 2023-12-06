@@ -1,7 +1,8 @@
 import { AdDetail } from '@/components/AdDetail';
 import { getAdById } from '@/server/ads';
 import { getUserById } from '@/server/user';
-import { EditCreateItemDialog } from '@/components/EditCreateItemDialog';
+import { EditCreateAd } from '@/components/EditCreateAd';
+import { AuthCheck } from '@/components/AuthCheck';
 
 type IdPageProps = {
 	params: {
@@ -21,8 +22,8 @@ const IdPage = async ({ params }: IdPageProps) => {
 
 	const feAd = {
 		id: ad.id,
-		publishedAt: ad.publishedAt.toLocaleString(),
-		updatedAt: ad.updatedAt.toLocaleString(),
+		publishedAt: ad.publishedAt.toString(),
+		updatedAt: ad.updatedAt.toString(),
 		title: ad.title,
 		description: ad.description,
 		price: ad.price,
@@ -35,17 +36,19 @@ const IdPage = async ({ params }: IdPageProps) => {
 		id: user.id,
 		name: user.name,
 		phone: user.phone,
-		emailVerified: user.emailVerified?.toLocaleString(),
+		emailVerified: user.emailVerified?.toString(),
 		email: user.email,
 		image: user.image
 	};
 
 	return (
-		<div className="w-full pe-10 ps-10">
-			<AdDetail ad={feAd} author={feUser}>
-				<EditCreateItemDialog ad={feAd} />
-			</AdDetail>
-		</div>
+		<AuthCheck>
+			<div className="w-full pe-10 ps-10">
+				<AdDetail ad={feAd} author={feUser}>
+					<EditCreateAd ad={feAd} />
+				</AdDetail>
+			</div>
+		</AuthCheck>
 	);
 };
 

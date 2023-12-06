@@ -1,13 +1,16 @@
 import { CreateEditAd } from '@/components/CreateEditAd';
 import { CreateEditAuction } from '@/components/CreateEditAuction';
+import { AuthCheck } from '@/components/AuthCheck';
 
 const MyListingPage = () => (
-	<div className="flex-col p-5">
-		<div className="flex items-center justify-end gap-2">
-			<CreateEditAd />
-			<CreateEditAuction />
+	<AuthCheck>
+		<div className="flex-col p-5">
+			<div className="flex items-center justify-end gap-2">
+				<CreateEditAd />
+				<CreateEditAuction />
+			</div>
 		</div>
-	</div>
+	</AuthCheck>
 );
 
 export default MyListingPage;
