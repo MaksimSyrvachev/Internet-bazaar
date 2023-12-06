@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
 	} else {
 		const resAuction = {
 			...result.data,
-			deadlineTime: Number(result.data.deadlineTime)
+			deadlineTime: new Date(result.data.deadlineTime)
 		};
 		const newAuction = await db.auction.create({
 			data: {

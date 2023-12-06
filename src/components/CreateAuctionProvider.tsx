@@ -6,57 +6,52 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
+import z from 'zod';
 
-import { type Ad, type AdForm } from '@/types/ads';
-import { adFormSchema } from '@/validators/ads';
-import { createAd } from '@/fetch/createAd';
-import { editAd } from '@/fetch/editAd';
+import { type CreateAuction } from '@/types/auctions';
+import { createAuctionSchema } from '@/validators/auctions';
+import { createAuction } from '@/fetch/createAuction';
+import { DurationEnum } from '@/model/DurationEnum';
 
 type Props = {
-	ad?: Ad;
 	children?: React.ReactNode;
 };
 
-export const CreateEditAdProvider = ({ children, ad }: Props) => {
+export const CreateAuctionProvider = ({ children }: Props) => {
 	const router = useRouter();
 	const { data: sessionData, status } = useSession();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
-	const methods = useForm<AdForm>({
-		resolver: zodResolver(adFormSchema)
+	const methods = useForm<CreateAuction>({
+		resolver: zodResolver(createAuctionSchema)
 	});
 
-	const createMethods = useMutation({ mutationFn: createAd });
-	const editMethods = useMutation({ mutationFn: editAd });
+	const createMethods = useMutation({ mutationFn: createAuction });
 
-	const onSubmit: SubmitHandler<AdForm> = data => {
-		if (ad !== undefined) {
-			const newAd = { ...data, id: ad.id, authorId: ad.authorId };
+	const onSubmit: SubmitHandler<CreateAuction> = data => {
+		const deadline = new Date();
+		deadline.setHours(deadline.getHours() + Number(data.duration.valueOf()));
 
-			editMethods.mutate(newAd, {
-				onSuccess: _ => {
-					methods.reset();
-					dialogRef.current?.close();
-					router.replace(`/home`);
-				},
-				onError: () => {
-					alert('There was an error');
-				}
-			});
-		} else {
-			const newAd = { ...data, authorId: sessionData?.user.id! };
+		const newAuction = {
+			...data,
+			authorId: sessionData?.user.id!,
+			deadlineTime: deadline.toString(),
+			createBidSchema: {
+				amount: data.startingPrice,
+				bidderId: sessionData?.user.id!
+			}
+		};
 
-			createMethods.mutate(newAd, {
-				onSuccess: _ => {
-					methods.reset();
-					dialogRef.current?.close();
-					router.replace(`/home`);
-				},
-				onError: () => {
-					alert('There was an error');
-				}
-			});
-		}
+		createMethods.mutate(newAuction, {
+			onSuccess: _ => {
+				methods.reset();
+				dialogRef.current?.close();
+				router.replace(`/my_listing`);
+			},
+			onError: () => {
+				alert('There was an error');
+			}
+		});
 	};
 
 	const onOpenButton = () => {
@@ -78,7 +73,6 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 							type="text"
 							placeholder="Title"
 							{...methods.register('title', { required: true })}
-							defaultValue={ad !== undefined ? ad.title : ''}
 						/>
 						{methods.formState.errors.title?.message ? (
 							<p>{methods.formState.errors.title.message.toString()}</p>
@@ -92,7 +86,6 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 							className=" h-24 rounded-lg border-2 border-gray-500 p-1"
 							placeholder="Description"
 							{...methods.register('description')}
-							defaultValue={ad?.description ? ad.description : ''}
 						/>
 						{methods.formState.errors.description?.message ? (
 							<p>{methods.formState.errors.description.message.toString()}</p>
@@ -100,17 +93,21 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 							<br />
 						)}
 
-						<label htmlFor="price">Expected price(EUR)</label>
+						<label htmlFor="price">Starting price(EUR)</label>
 						<input
 							className="rounded-lg border-2 border-gray-500 p-1"
 							id="price"
 							type="number"
-							placeholder="Price"
-							{...methods.register('price', { valueAsNumber: true })}
-							defaultValue={ad?.price ? ad.price : 0}
+							placeholder="Starting price"
+							{...methods.register('startingPrice', {
+								valueAsNumber: true,
+								required: true
+							})}
 						/>
-						{methods.formState.errors.price?.message ? (
-							<p>{methods.formState.errors.price?.message.toString()}</p>
+						{methods.formState.errors.startingPrice?.message ? (
+							<p>
+								{methods.formState.errors.startingPrice?.message.toString()}
+							</p>
 						) : (
 							<br />
 						)}
@@ -122,13 +119,24 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 							type="text"
 							placeholder="Image URL"
 							{...methods.register('image_URL')}
-							defaultValue={ad?.image_URL ? ad?.image_URL : ''}
 						/>
 						{methods.formState.errors.image_URL?.message ? (
 							<p>{methods.formState.errors.image_URL.message.toString()}</p>
 						) : (
 							<br />
 						)}
+
+						<label htmlFor="name">Duration</label>
+						<select
+							className="w-96 rounded-lg bg-slate-50 px-2 py-1 shadow"
+							{...methods.register('duration')}
+						>
+							{Object.values(DurationEnum).map(duration => (
+								<option value={duration.valueOf()} key={duration.valueOf()}>
+									{duration.valueOf()}
+								</option>
+							))}
+						</select>
 
 						{children}
 						<div className="flex items-center justify-center gap-2">
@@ -145,9 +153,7 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 								className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
 								type="submit"
 							>
-								{createMethods.isPending || editMethods.isPending
-									? 'Sending...'
-									: 'Send'}
+								{createMethods.isPending ? 'Sending...' : 'Send'}
 							</button>
 						</div>
 					</form>
@@ -156,7 +162,7 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 					className="rounded bg-primaryBackground p-1 hover:bg-hoverPrimary"
 					onClick={onOpenButton}
 				>
-					{ad === undefined ? 'Create ad' : 'Edit ad'}
+					Create auction
 				</button>
 			</FormProvider>
 		</div>

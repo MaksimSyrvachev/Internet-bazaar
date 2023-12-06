@@ -1,5 +1,7 @@
 import z from 'zod';
 
+import { DurationEnum } from '@/model/DurationEnum';
+
 const auctionSchema = z.object({
 	id: z.string(),
 	publishedAt: z.string(),
@@ -53,3 +55,16 @@ export const auctionFormSchema = auctionSchema.extend({ bidFormSchema }).omit({
 	authorId: true,
 	categoryId: true
 });
+
+export const createAuctionSchema = auctionSchema
+	.omit({
+		id: true,
+		updatedAt: true,
+		publishedAt: true,
+		authorId: true,
+		deadlineTime: true
+	})
+	.extend({
+		startingPrice: z.number().nonnegative(),
+		duration: z.nativeEnum(DurationEnum)
+	});
