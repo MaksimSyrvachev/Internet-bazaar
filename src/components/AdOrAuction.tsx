@@ -59,8 +59,8 @@ export const AdOrAuction = (props: Props) => {
 						<button className="pr-5">Bid</button>
 					</div>
 					<div>
-						{Number(props.auction.deadlineTime) - new Date().getTime() > 0 ? (
-							<AuctionTimeLeft deadline={Number(props.auction.deadlineTime)} />
+						{new Date(props.auction.deadlineTime).getTime() > new Date().getTime() ? (
+							<AuctionTimeLeft deadline={new Date(props.auction.deadlineTime).getTime()} />
 						) : (
 							<p className="p-2 text-red-500">EXPIRED</p>
 						)}

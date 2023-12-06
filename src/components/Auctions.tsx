@@ -57,7 +57,7 @@ export const Auctions = () => {
 	return (
 		<ul>
 			{filteredData
-				?.filter(auc => Number(auc.deadlineTime) - new Date().getTime() > 0)
+				?.filter(auc => new Date(auc.deadlineTime).getTime() > new Date().getTime())
 				.map(auction => (
 					<li key={auction.id}>
 						<AdOrAuction auction={auction} />

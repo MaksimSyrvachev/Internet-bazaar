@@ -10,6 +10,9 @@ export const GET = async () => {
 				},
 				take: 1
 			}
+		},
+		orderBy: {
+			deadlineTime: "asc"
 		}
 	});
 	const resultAuctions = auctions.map(auction => ({
