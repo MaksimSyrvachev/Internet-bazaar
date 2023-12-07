@@ -24,32 +24,37 @@ export const GET = async () => {
 
 export const POST = async (request: Request) => {
 	const newAuction = await request.json();
+	console.log(newAuction);
+
 	const result = postAuctionSchema.safeParse(newAuction);
 	if (!result.success) {
 		throw new Error('Invalid data from front-end');
 	} else {
-		const resAuction = {
-			...result.data,
-			deadlineTime: new Date(result.data.deadlineTime)
-		};
+		console.log(result.data.deadlineTime);
+
 		const newAuction = await db.auction.create({
 			data: {
-				title: resAuction.title,
-				description: resAuction.description,
-				image_URL: resAuction.image_URL,
-				deadlineTime: resAuction.deadlineTime,
-				authorId: resAuction.authorId,
-				categoryId: resAuction.categoryId,
+				title: result.data.title,
+				description: result.data.description,
+				image_URL: result.data.image_URL,
+				deadlineTime: BigInt(result.data.deadlineTime),
+				authorId: result.data.authorId,
+				categoryId: result.data.categoryId,
 				bids: {
 					create: [
 						{
-							amount: resAuction.createBidSchema.amount,
-							bidderId: resAuction.createBidSchema.bidderId
+							amount: result.data.createBidSchema.amount,
+							bidderId: result.data.createBidSchema.bidderId
 						}
 					]
 				}
 			}
 		});
-		return Response.json(newAuction);
+
+		const resultAuction = {
+			...newAuction,
+			deadlineTime: String(newAuction.deadlineTime)
+		};
+		return Response.json(resultAuction);
 	}
 };

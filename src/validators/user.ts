@@ -13,3 +13,12 @@ export const userSchema = putUserSchema.extend({
 	email: z.string().nullish(),
 	image: z.string().nullish()
 });
+
+// export const userSchema = z.object({
+// 	id: z.string(),
+// 	name: z.string().nullable(),
+// 	phone: z.string().nullable(),
+// 	email: z.string().nullable(),
+// 	emailVerified: z.string().nullable(),
+// 	image: z.string().nullable()
+// });

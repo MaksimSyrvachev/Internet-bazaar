@@ -1,10 +1,11 @@
-import { Suspense, type PropsWithChildren } from 'react';
+import { Suspense } from 'react';
 
+import { Auctions } from '@/components/Auctions';
 import { CategoriesFetchFilter } from '@/components/CategoriesFetchFilter';
 import { LeftFilter } from '@/components/LeftFilter';
 import { LeftFilterProvider } from '@/components/LeftFilterProvider';
 
-const Layout = ({ children }: PropsWithChildren) => (
+const AuctionsPage = () => (
 	<LeftFilterProvider>
 		<div className="w-full">
 			<div className="md:flex md:space-x-2">
@@ -13,10 +14,12 @@ const Layout = ({ children }: PropsWithChildren) => (
 						<CategoriesFetchFilter />
 					</Suspense>
 				</div>
-				<div className="md:flex-grow">{children}</div>
+				<div className="md:flex-grow">
+					<Auctions />
+				</div>
 			</div>
 		</div>
 	</LeftFilterProvider>
 );
 
-export default Layout;
+export default AuctionsPage;

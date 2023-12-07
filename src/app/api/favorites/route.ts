@@ -30,7 +30,11 @@ export const GET = async (request: Request) => {
 		});
 		const ads = user?.favoriteAds ?? [];
 		const auctions = user?.favoriteAuctions ?? [];
-		return Response.json([...ads, ...auctions]);
+		const modifiedAuctions = auctions.map(auction => ({
+			...auction,
+			deadlineTime: String(auction.deadlineTime)
+		}));
+		return Response.json([...ads, ...modifiedAuctions]);
 	}
 };
 

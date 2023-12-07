@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
 import z from 'zod';
 
-import { type CreateAuction } from '@/types/auctions';
+import { type PostAuction, type CreateAuction } from '@/types/auctions';
 import { createAuctionSchema } from '@/validators/auctions';
 import { createAuction } from '@/fetch/createAuction';
 import { DurationEnum } from '@/model/DurationEnum';
@@ -28,28 +28,41 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 
 	const createMethods = useMutation({ mutationFn: createAuction });
 
-	const onSubmit: SubmitHandler<CreateAuction> = data => {
+	const onSubmit: SubmitHandler<CreateAuction> = async data => {
 		const deadline = new Date();
 		deadline.setHours(deadline.getHours() + Number(data.duration.valueOf()));
 
-		const newAuction = {
-			...data,
+		// const newAuction = {
+		// 	...data,
+		// 	authorId: sessionData?.user.id!,
+		// 	deadlineTime: deadline.getTime().toString(),
+		// 	createBidSchema: {
+		// 		amount: data.startingPrice,
+		// 		bidderId: sessionData?.user.id!
+		// 	}
+		// };
+
+		const newAuction: PostAuction = {
+			title: data.title,
+			description: data.description,
+			deadlineTime: deadline.getTime().toString(),
 			authorId: sessionData?.user.id!,
-			deadlineTime: deadline.toString(),
+			categoryId: data.categoryId,
 			createBidSchema: {
 				amount: data.startingPrice,
 				bidderId: sessionData?.user.id!
-			}
+			},
+			image_URL: data.image_URL !== '' ? data.image_URL : null
 		};
 
-		createMethods.mutate(newAuction, {
+		createMethods.mutateAsync(newAuction, {
 			onSuccess: _ => {
 				methods.reset();
 				dialogRef.current?.close();
 				router.replace(`/my_listing`);
 			},
-			onError: () => {
-				alert('There was an error');
+			onError: error => {
+				console.log(error.message);
 			}
 		});
 	};

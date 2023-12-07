@@ -1,17 +1,22 @@
 'use client';
 
 import { CiHeart } from 'react-icons/ci';
+import { FaHeart } from 'react-icons/fa';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
-import { useSession } from 'next-auth/react';
 
 import { type Ad as AdModel } from '@/types/ads';
 import { type AuctionWithBid as AuctionModel } from '@/types/auctions';
+import { type putAndDeleteFavorite } from '@/types/favorite';
+import { userSchema } from '@/validators/user';
 import { AuctionTimeLeft } from '@/components/AuctionTimeLeft';
 
 type Props = {
 	ad?: AdModel;
 	auction?: AuctionModel;
+	favorites?: (AdModel | AuctionModel)[];
+	userId?: string;
 };
 
 export const AdOrAuction = (props: Props) => {
@@ -21,9 +26,43 @@ export const AdOrAuction = (props: Props) => {
 		props.auction?.authorId === data?.user.id ||
 		props.ad?.authorId === data?.user.id;
 	const isLoggedIn = status === 'authenticated';
+	const isFavorite = props.favorites?.some(obj => obj.id === props.ad?.id)
+		? true
+		: false;
 
-	const handleCklickFavourite = () => {
-		console.log('sds');
+	const queryClient = useQueryClient();
+	const favoriteFunc = async (data: putAndDeleteFavorite) => {
+		const response = await fetch('/api/favorites', {
+			method: isFavorite ? 'DELETE' : 'PUT',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+		const result = await response.json();
+		const validatedResult = userSchema.safeParse(result);
+		if (!validatedResult.success) {
+			throw new Error('Invalid data from back-end');
+		} else {
+			return validatedResult.data;
+		}
+	};
+	const favoriteMutation = useMutation({
+		mutationFn: favoriteFunc,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['list', 'favorites'] });
+		}
+	});
+	const handleCklickFavorite = async () => {
+		if (props.userId) {
+			favoriteMutation.mutateAsync({
+				userId: props.userId,
+				adId: props.ad?.id
+			});
+		} else {
+			signIn('discord');
+		}
 	};
 
 	const onItemClick = () => {
@@ -53,8 +92,8 @@ export const AdOrAuction = (props: Props) => {
 						<div>Price: {props.ad.price ?? 'By agreement'}</div>
 					</div>
 					<div className="flex w-2/12 items-center justify-center ">
-						<button onClick={handleCklickFavourite}>
-							<CiHeart size={30} />
+						<button onClick={() => handleCklickFavorite()}>
+							{isFavorite ? <FaHeart size={25} /> : <CiHeart size={30} />}
 						</button>
 					</div>
 				</>
@@ -65,11 +104,8 @@ export const AdOrAuction = (props: Props) => {
 						<p className="p-2">Highest bid: {props.auction.bids[0].amount}$</p>
 					</div>
 					<div>
-						{new Date(props.auction.deadlineTime).getTime() >
-						new Date().getTime() ? (
-							<AuctionTimeLeft
-								deadline={new Date(props.auction.deadlineTime).getTime()}
-							/>
+						{Number(props.auction.deadlineTime) > new Date().getTime() ? (
+							<AuctionTimeLeft deadline={Number(props.auction.deadlineTime)} />
 						) : (
 							<p className="p-2 text-red-500">EXPIRED</p>
 						)}

@@ -33,7 +33,7 @@ export const DELETE = async (
 		return notFound();
 	}
 
-	if (auction.deadlineTime > new Date()) {
+	if (auction.deadlineTime > new Date().getTime()) {
 		return new Response(null, { status: 500 });
 	}
 

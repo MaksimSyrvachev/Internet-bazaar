@@ -27,8 +27,12 @@ export const GET = async (request: Request) => {
 				}
 			}
 		});
-		const adds = user?.ads ?? [];
-		const auctionss = user?.auctions ?? [];
-		return Response.json([...adds, ...auctionss]);
+		const ads = user?.ads ?? [];
+		const auctions = user?.auctions ?? [];
+		const modifiedAuctions = auctions.map(auction => ({
+			...auction,
+			deadlineTime: String(auction.deadlineTime)
+		}));
+		return Response.json([...ads, ...modifiedAuctions]);
 	}
 };

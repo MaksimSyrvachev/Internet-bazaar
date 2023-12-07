@@ -1,3 +1,5 @@
+'use client';
+
 import { useContext, useState, useEffect } from 'react';
 
 import { type Ad } from '@/types/ads';
@@ -8,13 +10,15 @@ import {
 } from '@/components/Providers';
 
 export const useFilter = (
-	auctionsOrAds: AuctionWithBid[] | Ad[] | undefined
+	auctionsOrAds: AuctionWithBid[] | Ad[] | (AuctionWithBid | Ad)[] | undefined
 ) => {
 	const [categorySelect, setCategorySelected] = useContext(
 		CategorySelectedContext
 	);
 	const [searchFilter, setSearchFilter] = useContext(FilterSearchContext);
-	const [filteredData, setFilteredData] = useState<AuctionWithBid[] | Ad[]>([]);
+	const [filteredData, setFilteredData] = useState<
+		AuctionWithBid[] | Ad[] | (AuctionWithBid | Ad)[]
+	>([]);
 
 	useEffect(() => {
 		setSearchFilter('');

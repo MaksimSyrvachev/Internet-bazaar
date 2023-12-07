@@ -29,11 +29,8 @@ export const AuctionDetail = (props: Props) => {
 					<h1 className="flex-grow text-4xl">{props.auction.title}</h1>
 				</div>
 				<div className="flex flex-grow items-center justify-center pt-2 md:pt-0">
-					{new Date(props.auction.deadlineTime).getTime() >
-					new Date().getTime() ? (
-						<AuctionTimeLeft
-							deadline={new Date(props.auction.deadlineTime).getTime()}
-						/>
+					{Number(props.auction.deadlineTime) > new Date().getTime() ? (
+						<AuctionTimeLeft deadline={Number(props.auction.deadlineTime)} />
 					) : (
 						<p className="p-2 text-red-500">EXPIRED</p>
 					)}
@@ -73,8 +70,7 @@ export const AuctionDetail = (props: Props) => {
 						</div>
 					</div>
 					{jeVlastnik &&
-						new Date(props.auction.deadlineTime).getTime() <
-							new Date().getTime() && (
+						Number(props.auction.deadlineTime) < new Date().getTime() && (
 							<div className="flex items-center justify-center gap-2 md:items-center md:justify-start">
 								<DeleteItemDialog
 									id={props.auction.id}
