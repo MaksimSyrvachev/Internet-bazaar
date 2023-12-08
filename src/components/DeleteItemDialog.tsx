@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 import { ItemEnum, type ItemEnum as ItemEnumType } from '@/model/ItemEnum';
@@ -16,6 +16,7 @@ type Props = {
 export const DeleteItemDialog = (props: Props) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const onDeleteOpenButton = () => {
 		dialogRef.current?.showModal();
@@ -29,7 +30,8 @@ export const DeleteItemDialog = (props: Props) => {
 			methodsAd.mutate(props.id, {
 				onSuccess: _ => {
 					dialogRef.current?.close();
-					router.replace(`/home`);
+					queryClient.invalidateQueries({ queryKey: ['list', 'myListing'] });
+					router.replace(`/my_listing`);
 				},
 				onError: () => {
 					alert('There was an error');
@@ -39,6 +41,7 @@ export const DeleteItemDialog = (props: Props) => {
 			methodsAuction.mutate(props.id, {
 				onSuccess: _ => {
 					dialogRef.current?.close();
+					queryClient.invalidateQueries({ queryKey: ['list', 'myListing'] });
 					router.replace(`/my_listing`);
 				},
 				onError: () => {

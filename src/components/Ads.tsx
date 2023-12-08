@@ -7,6 +7,7 @@ import { useFilter } from '@/hooks/useFilter';
 import { useFavorites } from '@/hooks/useFavourites';
 
 import { AdOrAuction } from './AdOrAuction';
+import Spinner from './Spinner';
 
 export const Ads = () => {
 	const { data: ads, isPending, error } = useAds();
@@ -15,7 +16,11 @@ export const Ads = () => {
 	const { data: favorites } = useFavorites(data?.user.id);
 
 	if (isPending) {
-		return <div>Loading...</div>;
+		return (
+			<div className="mt-2 flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
 	}
 
 	if (error) return `An error has occurred: ${error.message}`;

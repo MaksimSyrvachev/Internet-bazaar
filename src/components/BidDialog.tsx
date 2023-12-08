@@ -8,10 +8,6 @@ import { useSession } from 'next-auth/react';
 import z from 'zod';
 import { useRouter } from 'next/navigation';
 
-import { type Ad } from '@/types/ads';
-import { SendingEmail, type TextEmail } from '@/types/sendingEmail';
-import { sendingEmailSchema, textEmail } from '@/validators/sendingEmail';
-import { sendEmail } from '@/fetch/sendEmail';
 import { type AuctionWithBid } from '@/types/auctions';
 import { type Bidding } from '@/types/bidding';
 import { bidding } from '@/validators/bidding';

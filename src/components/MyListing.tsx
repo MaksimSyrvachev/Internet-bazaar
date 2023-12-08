@@ -9,6 +9,7 @@ import { useMyListing } from '@/hooks/useMyListing';
 import { useFavorites } from '@/hooks/useFavourites';
 
 import { AdOrAuction } from './AdOrAuction';
+import Spinner from './Spinner';
 
 export const MyListing = () => {
 	const { data } = useSession();
@@ -17,7 +18,11 @@ export const MyListing = () => {
 	const { data: favorites } = useFavorites(data?.user.id);
 
 	if (isPending) {
-		return <div>Loading...</div>;
+		return (
+			<div className="mt-2 flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
 	}
 
 	if (error) return `An error has occurred: ${error.message}`;
@@ -26,7 +31,12 @@ export const MyListing = () => {
 		<ul>
 			{filteredData.map(adOrAuc =>
 				'bids' in adOrAuc ? (
-					<AdOrAuction key={adOrAuc.id} auction={adOrAuc} />
+					<AdOrAuction
+						key={adOrAuc.id}
+						auction={adOrAuc}
+						favorites={favorites}
+						userId={data?.user.id}
+					/>
 				) : (
 					<AdOrAuction
 						key={adOrAuc.id}

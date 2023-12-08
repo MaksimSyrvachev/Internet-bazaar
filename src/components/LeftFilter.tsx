@@ -40,7 +40,7 @@ export const LeftFilter = ({ categories }: Props) => {
 						<div className="flex-1">
 							<SearchInput />
 						</div>
-						<div className="flex items-center justify-center p-2">
+						<div className="mt-2 flex items-center justify-center">
 							<Spinner />
 						</div>
 					</div>

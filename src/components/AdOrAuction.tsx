@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { CiHeart } from 'react-icons/ci';
 import { FaHeart } from 'react-icons/fa';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -8,9 +9,10 @@ import { useRouter } from 'next/navigation';
 
 import { type Ad as AdModel } from '@/types/ads';
 import { type AuctionWithBid as AuctionModel } from '@/types/auctions';
-import { type putAndDeleteFavorite } from '@/types/favorite';
-import { userSchema } from '@/validators/user';
 import { AuctionTimeLeft } from '@/components/AuctionTimeLeft';
+import { favoriteFunc } from '@/fetch/deletePutFavorite';
+
+import default_img from '../../public/default_img.jpg';
 
 type Props = {
 	ad?: AdModel;
@@ -26,39 +28,30 @@ export const AdOrAuction = (props: Props) => {
 		props.auction?.authorId === data?.user.id ||
 		props.ad?.authorId === data?.user.id;
 	const isLoggedIn = status === 'authenticated';
-	const isFavorite = props.favorites?.some(obj => obj.id === props.ad?.id)
+	const isFavorite = props.ad
+		? props.favorites?.some(obj => obj.id === props.ad?.id)
+			? true
+			: false
+		: props.favorites?.some(obj => obj.id === props.auction?.id)
 		? true
 		: false;
 
 	const queryClient = useQueryClient();
-	const favoriteFunc = async (data: putAndDeleteFavorite) => {
-		const response = await fetch('/api/favorites', {
-			method: isFavorite ? 'DELETE' : 'PUT',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		});
-		const result = await response.json();
-		const validatedResult = userSchema.safeParse(result);
-		if (!validatedResult.success) {
-			throw new Error('Invalid data from back-end');
-		} else {
-			return validatedResult.data;
-		}
-	};
 	const favoriteMutation = useMutation({
-		mutationFn: favoriteFunc,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['list', 'favorites'] });
-		}
+		mutationFn: favoriteFunc
 	});
 	const handleCklickFavorite = async () => {
 		if (props.userId) {
-			favoriteMutation.mutateAsync({
+			const data = {
 				userId: props.userId,
-				adId: props.ad?.id
+				adId: props.ad?.id,
+				auctionId: props.auction?.id,
+				isFavorite
+			};
+			favoriteMutation.mutateAsync(data, {
+				onSuccess: () => {
+					queryClient.invalidateQueries({ queryKey: ['list', 'favorites'] });
+				}
 			});
 		} else {
 			signIn('discord');
@@ -77,18 +70,24 @@ export const AdOrAuction = (props: Props) => {
 
 	return (
 		<div className="m-2 flex border-2 p-2 hover:bg-adBackground">
-			<div className="flex w-1/12 items-center justify-center">
-				<div>{props.ad ? props.ad.image_URL : props.auction?.image_URL}</div>
+			<div className="m-2 flex w-2/12 items-center justify-center">
+				<Image
+					src={props.ad?.image_URL ?? props.auction?.image_URL ?? default_img}
+					layout="responsive"
+					alt="Ad image"
+				/>
 			</div>
-			<div className="w-7/12 flex-col">
-				<div>{props.ad ? props.ad.title : props.auction?.title}</div>
+			<div className="w-5/12 flex-col">
+				<div className="text-lg font-bold">
+					{props.ad ? props.ad.title : props.auction?.title}
+				</div>
 				<div>
 					{props.ad ? props.ad.description : props.auction?.description}
 				</div>
 			</div>
 			{props.ad && (
 				<>
-					<div className="flex w-2/12 items-center justify-start ">
+					<div className="flex w-3/12 items-center justify-start p-2 ">
 						<div>Price: {props.ad.price ?? 'By agreement'}</div>
 					</div>
 					<div className="flex w-2/12 items-center justify-center ">
@@ -99,18 +98,29 @@ export const AdOrAuction = (props: Props) => {
 				</>
 			)}
 			{props.auction && (
-				<div className="flex w-4/12 flex-col pr-2">
-					<div className="flex justify-between ">
-						<p className="p-2">Highest bid: {props.auction.bids[0].amount}$</p>
+				<>
+					<div className="flex w-3/12 flex-col justify-center pr-2">
+						<div className="flex justify-between ">
+							<p className="p-2">
+								Highest bid: {props.auction.bids[0].amount}$
+							</p>
+						</div>
+						<div>
+							{Number(props.auction.deadlineTime) > new Date().getTime() ? (
+								<AuctionTimeLeft
+									deadline={Number(props.auction.deadlineTime)}
+								/>
+							) : (
+								<p className="p-2 text-red-500">EXPIRED</p>
+							)}
+						</div>
 					</div>
-					<div>
-						{Number(props.auction.deadlineTime) > new Date().getTime() ? (
-							<AuctionTimeLeft deadline={Number(props.auction.deadlineTime)} />
-						) : (
-							<p className="p-2 text-red-500">EXPIRED</p>
-						)}
+					<div className="flex w-2/12 items-center justify-center ">
+						<button onClick={() => handleCklickFavorite()}>
+							{isFavorite ? <FaHeart size={25} /> : <CiHeart size={30} />}
+						</button>
 					</div>
-				</div>
+				</>
 			)}
 			<div className="flex items-center justify-center">
 				<div className="flex-col space-y-1">

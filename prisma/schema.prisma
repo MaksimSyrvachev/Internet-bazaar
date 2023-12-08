@@ -100,8 +100,8 @@ model Bid {
   id        String   @id @default(cuid())
   amount    Int
   createdAt DateTime @default(now())
-  auction   Auction  @relation(fields: [auctionId], references: [id])
+  auction   Auction  @relation(fields: [auctionId], references: [id], onDelete: Cascade)
   auctionId String
-  bidder    User     @relation(fields: [bidderId], references: [id])
+  bidder    User     @relation(fields: [bidderId], references: [id], onDelete: Cascade)
   bidderId  String
 }

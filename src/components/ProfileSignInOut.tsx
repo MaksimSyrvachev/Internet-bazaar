@@ -2,10 +2,13 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaPerson } from 'react-icons/fa6';
 
 const ProfileSignInOut = () => {
 	const { data, status } = useSession();
+	const router = useRouter();
+	const pathname = usePathname();
 
 	if (status === 'unauthenticated') {
 		return (
@@ -24,23 +27,32 @@ const ProfileSignInOut = () => {
 		return (
 			<div className="flex items-center gap-3">
 				{data?.user?.image !== null && data?.user.image !== undefined ? (
-					<Image
-						src={data?.user?.image}
-						alt="Profile image"
-						width="50"
-						height="50"
-						className="max-h-8 max-w-min rounded md:max-h-10 lg:max-h-14"
-					/>
+					<button
+						className={
+							pathname === '/my_profile'
+								? 'm-3 rounded bg-selectedPrimary p-2 hover:bg-hoverPrimary'
+								: 'm-3 rounded p-2 hover:bg-hoverPrimary'
+						}
+						onClick={() => router.replace('/my_profile')}
+					>
+						<Image
+							src={data?.user?.image}
+							alt="Profile image"
+							width="50"
+							height="50"
+							className="max-h-8 max-w-min rounded md:max-h-10 lg:max-h-14"
+						/>
+					</button>
 				) : (
 					<FaPerson size={30} />
 				)}
 				<div>Hi, {data?.user.name}</div>
-				<button
+				{/* <button
 					onClick={() => signOut()}
 					className="m-3 rounded p-2 hover:bg-hoverPrimary"
 				>
 					Sign out
-				</button>
+				</button> */}
 			</div>
 		);
 	}

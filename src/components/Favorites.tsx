@@ -8,6 +8,7 @@ import { useFavorites } from '@/hooks/useFavourites';
 import { type AuctionWithBid } from '@/types/auctions';
 
 import { AdOrAuction } from './AdOrAuction';
+import Spinner from './Spinner';
 
 export const Favorites = () => {
 	const { data } = useSession();
@@ -15,7 +16,11 @@ export const Favorites = () => {
 	const filteredData = useFilter(favorites) as (AuctionWithBid | Ad)[];
 
 	if (isPending) {
-		return <div>Loading...</div>;
+		return (
+			<div className="mt-2 flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
 	}
 
 	if (error) return `An error has occurred: ${error.message}`;
@@ -24,7 +29,12 @@ export const Favorites = () => {
 		<ul>
 			{filteredData.map(adOrAuc =>
 				'bids' in adOrAuc ? (
-					<AdOrAuction key={adOrAuc.id} auction={adOrAuc} />
+					<AdOrAuction
+						key={adOrAuc.id}
+						auction={adOrAuc}
+						favorites={favorites}
+						userId={data?.user.id}
+					/>
 				) : (
 					<AdOrAuction
 						key={adOrAuc.id}

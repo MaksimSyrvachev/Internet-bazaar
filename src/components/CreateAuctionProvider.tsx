@@ -2,7 +2,7 @@
 
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
@@ -21,6 +21,7 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 	const router = useRouter();
 	const { data: sessionData, status } = useSession();
 	const dialogRef = useRef<HTMLDialogElement>(null);
+	const queryClient = useQueryClient();
 
 	const methods = useForm<CreateAuction>({
 		resolver: zodResolver(createAuctionSchema)
@@ -31,16 +32,6 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 	const onSubmit: SubmitHandler<CreateAuction> = async data => {
 		const deadline = new Date();
 		deadline.setHours(deadline.getHours() + Number(data.duration.valueOf()));
-
-		// const newAuction = {
-		// 	...data,
-		// 	authorId: sessionData?.user.id!,
-		// 	deadlineTime: deadline.getTime().toString(),
-		// 	createBidSchema: {
-		// 		amount: data.startingPrice,
-		// 		bidderId: sessionData?.user.id!
-		// 	}
-		// };
 
 		const newAuction: PostAuction = {
 			title: data.title,
@@ -59,6 +50,7 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 			onSuccess: _ => {
 				methods.reset();
 				dialogRef.current?.close();
+				queryClient.invalidateQueries({ queryKey: ['list', 'myListing'] });
 				router.replace(`/my_listing`);
 			},
 			onError: error => {

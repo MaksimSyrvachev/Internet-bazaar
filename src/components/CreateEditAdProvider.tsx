@@ -2,7 +2,7 @@
 
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
@@ -21,6 +21,7 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 	const router = useRouter();
 	const { data: sessionData, status } = useSession();
 	const dialogRef = useRef<HTMLDialogElement>(null);
+	const queryClient = useQueryClient();
 
 	const methods = useForm<AdForm>({
 		resolver: zodResolver(adFormSchema)
@@ -31,26 +32,37 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 
 	const onSubmit: SubmitHandler<AdForm> = data => {
 		if (ad !== undefined) {
-			const newAd = { ...data, id: ad.id, authorId: ad.authorId };
+			const newAd = {
+				...data,
+				image_URL: data.image_URL === '' ? null : data.image_URL,
+				id: ad.id,
+				authorId: ad.authorId
+			};
 
 			editMethods.mutate(newAd, {
 				onSuccess: _ => {
 					methods.reset();
 					dialogRef.current?.close();
-					router.replace(`/home`);
+					queryClient.invalidateQueries({ queryKey: ['list', 'myListing'] });
+					router.replace(`/my_listing`);
 				},
 				onError: () => {
 					alert('There was an error');
 				}
 			});
 		} else {
-			const newAd = { ...data, authorId: sessionData?.user.id! };
+			const newAd = {
+				...data,
+				image_URL: data.image_URL === '' ? null : data.image_URL,
+				authorId: sessionData?.user.id!
+			};
 
 			createMethods.mutate(newAd, {
 				onSuccess: _ => {
 					methods.reset();
 					dialogRef.current?.close();
-					router.replace(`/home`);
+					queryClient.invalidateQueries({ queryKey: ['list', 'myListing'] });
+					router.replace(`/my_listing`);
 				},
 				onError: () => {
 					alert('There was an error');

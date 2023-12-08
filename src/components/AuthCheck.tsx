@@ -3,6 +3,8 @@
 import { signIn, useSession } from 'next-auth/react';
 import { type ReactNode } from 'react';
 
+import Spinner from './Spinner';
+
 type Props = {
 	children: ReactNode;
 };
@@ -10,7 +12,7 @@ type Props = {
 export const AuthCheck = (props: Props) => {
 	const { data, status } = useSession();
 
-	if (status === 'unauthenticated' || status === 'loading') {
+	if (status === 'unauthenticated') {
 		return (
 			<div className="flex items-center justify-center p-5">
 				Oops, you need to sign in first.
@@ -23,6 +25,13 @@ export const AuthCheck = (props: Props) => {
 			</div>
 		);
 	}
+	if (status === 'loading') {
+		return (
+			<div className="mt-2 flex items-center justify-center">
+				<Spinner />
+			</div>
+		);
+	}
 
-	return <div>{props.children}</div>;
+	return <div className="w-full">{props.children}</div>;
 };
