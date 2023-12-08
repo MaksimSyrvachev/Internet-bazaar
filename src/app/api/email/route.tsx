@@ -1,7 +1,7 @@
 import { type NextApiResponse } from 'next';
 
 import { sendingEmailSchema } from '@/validators/sendingEmail';
-import {sendEmail} from "@/server/sendEmail";
+import { sendEmail } from '@/server/sendEmail';
 
 export const POST = async (request: Request, res: NextApiResponse) => {
 	const email = await request.json();
@@ -10,9 +10,9 @@ export const POST = async (request: Request, res: NextApiResponse) => {
 		throw new Error('Invalid data from front-end');
 	} else {
 		try {
-			await sendEmail(result.data)
+			await sendEmail(result.data);
 		} catch (error) {
-			return new Response(null, {status: 500})
+			return new Response(null, { status: 500 });
 		}
 		return new Response(null, { status: 200 });
 	}

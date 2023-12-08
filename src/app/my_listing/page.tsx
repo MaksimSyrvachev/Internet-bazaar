@@ -9,9 +9,9 @@ import { LeftFilter } from '@/components/LeftFilter';
 import { MyListing } from '@/components/MyListing';
 
 const MyListingPage = () => (
-	<AuthCheck>
-		<LeftFilterProvider>
-			<div className="w-full">
+	<div className="w-full">
+		<AuthCheck>
+			<LeftFilterProvider>
 				<div className="md:flex md:space-x-2">
 					<div className="md:h-auto md:w-72 md:flex-grow-0">
 						<Suspense fallback={<LeftFilter />}>
@@ -28,9 +28,9 @@ const MyListingPage = () => (
 						<MyListing />
 					</div>
 				</div>
-			</div>
-		</LeftFilterProvider>
-	</AuthCheck>
+			</LeftFilterProvider>
+		</AuthCheck>
+	</div>
 );
 
 export default MyListingPage;
