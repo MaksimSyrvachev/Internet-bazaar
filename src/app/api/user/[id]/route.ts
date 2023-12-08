@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation';
 
 import { db } from '@/server/db';
-import { putUserSchema, userIdSchema } from '@/validators/user';
 
 export const GET = async (
-	request: Request,
+	_: Request,
 	{ params }: { params: { id: string } }
 ) => {
 	const user = await db.user.findUnique({

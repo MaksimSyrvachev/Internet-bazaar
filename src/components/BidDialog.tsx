@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 
 import { type AuctionWithBid } from '@/types/auctions';
 import { type Bidding } from '@/types/bidding';
-import { bidding } from '@/validators/bidding';
 import { createBid } from '@/fetch/createBid';
 
 type Props = {
@@ -18,7 +17,7 @@ type Props = {
 };
 export const BidDialog = (props: Props) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
-	const { data: userData, status } = useSession();
+	const { data: userData } = useSession();
 	const router = useRouter();
 
 	const onOpenButton = () => {
@@ -42,10 +41,15 @@ export const BidDialog = (props: Props) => {
 	const { mutate, isPending } = useMutation({ mutationFn: createBid });
 
 	const onSubmit: SubmitHandler<Bidding> = data => {
+		if (userData === null) {
+			alert('Cannot define user');
+			return;
+		}
+
 		const dataToBeSent = {
 			amount: data.amount,
 			auctionId: props.auction.id,
-			bidderId: userData?.user.id!
+			bidderId: userData.user.id
 		};
 
 		mutate(dataToBeSent, {

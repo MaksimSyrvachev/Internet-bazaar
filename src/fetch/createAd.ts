@@ -1,6 +1,3 @@
-import { STATUS_CODES } from 'http';
-
-import { type SendingEmail } from '@/types/sendingEmail';
 import { type AdPost } from '@/types/ads';
 
 export const createAd = async (ad: AdPost) => {

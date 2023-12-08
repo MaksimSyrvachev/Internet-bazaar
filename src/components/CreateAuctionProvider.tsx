@@ -6,7 +6,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useRef } from 'react';
-import z from 'zod';
 
 import { type PostAuction, type CreateAuction } from '@/types/auctions';
 import { createAuctionSchema } from '@/validators/auctions';
@@ -19,7 +18,7 @@ type Props = {
 
 export const CreateAuctionProvider = ({ children }: Props) => {
 	const router = useRouter();
-	const { data: sessionData, status } = useSession();
+	const { data: sessionData } = useSession();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const queryClient = useQueryClient();
 
@@ -33,15 +32,20 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 		const deadline = new Date();
 		deadline.setHours(deadline.getHours() + Number(data.duration.valueOf()));
 
+		if (sessionData === null) {
+			alert('Cannot retrieve session');
+			return;
+		}
+
 		const newAuction: PostAuction = {
 			title: data.title,
 			description: data.description,
 			deadlineTime: deadline.getTime().toString(),
-			authorId: sessionData?.user.id!,
+			authorId: sessionData.user.id,
 			categoryId: data.categoryId,
 			createBidSchema: {
 				amount: data.startingPrice,
-				bidderId: sessionData?.user.id!
+				bidderId: sessionData.user.id
 			},
 			image_URL: data.image_URL !== '' ? data.image_URL : null
 		};

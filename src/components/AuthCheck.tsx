@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const AuthCheck = (props: Props) => {
-	const { data, status } = useSession();
+	const { status } = useSession();
 
 	if (status === 'unauthenticated') {
 		return (

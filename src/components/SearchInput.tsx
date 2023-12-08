@@ -17,7 +17,7 @@ const SearchInput = () => {
 
 	React.useEffect(() => {
 		setFilterSearch(inputValue);
-	}, [inputValue]);
+	});
 
 	return (
 		<div>

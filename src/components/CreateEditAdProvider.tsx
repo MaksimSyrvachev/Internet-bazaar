@@ -19,7 +19,7 @@ type Props = {
 
 export const CreateEditAdProvider = ({ children, ad }: Props) => {
 	const router = useRouter();
-	const { data: sessionData, status } = useSession();
+	const { data: sessionData } = useSession();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const queryClient = useQueryClient();
 
@@ -51,10 +51,15 @@ export const CreateEditAdProvider = ({ children, ad }: Props) => {
 				}
 			});
 		} else {
+			if (sessionData === null) {
+				alert('Cannot retrieve session');
+				return;
+			}
+
 			const newAd = {
 				...data,
 				image_URL: data.image_URL === '' ? null : data.image_URL,
-				authorId: sessionData?.user.id!
+				authorId: sessionData.user.id
 			};
 
 			createMethods.mutate(newAd, {

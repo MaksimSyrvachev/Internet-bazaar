@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { adSchema, validationGetAdsShema } from '@/validators/ads';
+import { adSchema } from '@/validators/ads';
 
 const getAd = async (id: string) => {
 	const response = await fetch(`/api/ad/${id}`);

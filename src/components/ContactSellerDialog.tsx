@@ -7,8 +7,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
 import { type Ad } from '@/types/ads';
-import { SendingEmail, type TextEmail } from '@/types/sendingEmail';
-import { sendingEmailSchema, textEmail } from '@/validators/sendingEmail';
+import { type TextEmail } from '@/types/sendingEmail';
+import { textEmail } from '@/validators/sendingEmail';
 import { sendEmail } from '@/fetch/sendEmail';
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 };
 export const ContactSellerDialog = (props: Props) => {
 	const dialogRef = useRef<HTMLDialogElement>(null);
-	const { data: userData, status } = useSession();
+	const { data: userData } = useSession();
 	const [message, setMessage] = useState<string | undefined>(undefined);
 
 	const onOpenButton = () => {
@@ -36,11 +36,23 @@ export const ContactSellerDialog = (props: Props) => {
 	const { mutate, isPending } = useMutation({ mutationFn: sendEmail });
 
 	const onSubmit: SubmitHandler<TextEmail> = data => {
-		console.log('AAAAAAAAAAAAA');
+		if (props.sellerEmail === undefined) {
+			alert('Cannot define seller email');
+			return;
+		}
+
+		if (
+			userData === null ||
+			userData.user.email === null ||
+			userData.user.email === undefined
+		) {
+			alert('Cannot retrieve your email');
+			return;
+		}
 
 		const dataToBeSent = {
-			to: props.sellerEmail!,
-			from: userData?.user?.email!,
+			to: props.sellerEmail,
+			from: userData.user.email,
 			title: props.item.title,
 			text: data.text
 		};

@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const AdDetail = (props: Props) => {
-	const { data, status } = useSession();
+	const { data } = useSession();
 	const { data: favorites } = useFavorites(data?.user.id);
 	const jeVlastnik = data?.user.id === props.ad?.authorId;
 	const queryClient = useQueryClient();
@@ -96,7 +96,9 @@ export const AdDetail = (props: Props) => {
 						</div>
 						{jeVlastnik || (
 							<ContactSellerDialog
-								sellerEmail={props.author.email!}
+								sellerEmail={
+									props.author.email === null ? undefined : props.author.email
+								}
 								item={props.ad}
 							/>
 						)}

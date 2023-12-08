@@ -23,7 +23,7 @@ export const useFilter = (
 	useEffect(() => {
 		setSearchFilter('');
 		setCategorySelected('');
-	}, []);
+	});
 
 	useEffect(() => {
 		if (auctionsOrAds) {

@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import { date } from 'zod';
 
 import { type SendingEmail } from '@/types/sendingEmail';
 
@@ -19,7 +18,7 @@ export const sendEmail = async (email: SendingEmail) => {
 		text: `${email.from} wrote: \n\n ${email.text} \n\n Please reply applicant at this email: ${email.from}`
 	};
 
-	transporter.sendMail(data, (error, info) => {
+	transporter.sendMail(data, (error, _) => {
 		if (error) {
 			console.log(error);
 			throw new Error();

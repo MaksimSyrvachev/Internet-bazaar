@@ -1,5 +1,3 @@
-import { STATUS_CODES } from 'http';
-
 import { type SendingEmail } from '@/types/sendingEmail';
 
 export const sendEmail = async (email: SendingEmail) => {

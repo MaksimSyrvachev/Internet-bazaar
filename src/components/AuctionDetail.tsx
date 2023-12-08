@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const AuctionDetail = (props: Props) => {
-	const { data, status } = useSession();
+	const { data } = useSession();
 	const { data: favorites } = useFavorites(data?.user.id);
 	const jeVlastnik = data?.user.id === props.auction.authorId;
 	const queryClient = useQueryClient();

@@ -1,9 +1,7 @@
-import { type NextApiResponse } from 'next';
-
 import { sendingEmailSchema } from '@/validators/sendingEmail';
 import { sendEmail } from '@/server/sendEmail';
 
-export const POST = async (request: Request, res: NextApiResponse) => {
+export const POST = async (request: Request) => {
 	const email = await request.json();
 	const result = sendingEmailSchema.safeParse(email);
 	if (!result.success) {

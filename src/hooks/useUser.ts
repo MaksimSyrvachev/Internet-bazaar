@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { putUserSchema, userSchema } from '@/validators/user';
+import { userSchema } from '@/validators/user';
 
 const getUser = async (id?: string) => {
 	const response = await fetch(`/api/user/${id}`);

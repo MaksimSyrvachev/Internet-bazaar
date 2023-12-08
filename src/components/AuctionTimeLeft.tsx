@@ -20,7 +20,7 @@ export const AuctionTimeLeft = ({ deadline }: Props) => {
 		setInterval(() => {
 			setFormattedTime(formatCountdown(deadline - new Date().getTime()));
 		}, 1000);
-	}, []);
+	}, [deadline]);
 
 	return <p className="p-2">Time left: {formattedTime}</p>;
 };
