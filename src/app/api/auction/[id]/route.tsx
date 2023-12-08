@@ -1,5 +1,3 @@
-import { notFound } from 'next/navigation';
-
 import { db } from '@/server/db';
 
 export const GET = async (
@@ -13,7 +11,7 @@ export const GET = async (
 	});
 
 	if (auction === undefined || auction === null) {
-		return notFound();
+		return new Response('Ad not found', { status: 404 });
 	}
 
 	return Response.json(auction);
@@ -30,7 +28,7 @@ export const DELETE = async (
 	});
 
 	if (auction === undefined || auction === null) {
-		return notFound();
+		return new Response('Ad not found', { status: 404 });
 	}
 
 	if (auction.deadlineTime > new Date().getTime()) {
@@ -44,7 +42,7 @@ export const DELETE = async (
 	});
 
 	if (auction === undefined || auction === null) {
-		return notFound();
+		return new Response('Ad not found', { status: 404 });
 	}
 
 	return new Response(null, { status: 200 });
