@@ -73,6 +73,8 @@ export const AdOrAuction = (props: Props) => {
 			<div className="m-2 flex w-2/12 items-center justify-center">
 				<Image
 					src={props.ad?.image_URL ?? props.auction?.image_URL ?? default_img}
+					width="100"
+					height="100"
 					layout="responsive"
 					alt="Ad image"
 				/>
