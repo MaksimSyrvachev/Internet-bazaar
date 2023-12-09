@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { type Metadata } from 'next';
 
 import { CreateEditAd } from '@/components/CreateEditAd';
 import { CreateEditAuction } from '@/components/CreateEditAuction';
@@ -7,6 +8,10 @@ import { LeftFilterProvider } from '@/components/LeftFilterProvider';
 import { CategoriesFetchFilter } from '@/components/CategoriesFetchFilter';
 import { LeftFilter } from '@/components/LeftFilter';
 import { MyListing } from '@/components/MyListing';
+
+export const metadata: Metadata = {
+	title: 'My Listing'
+};
 
 const MyListingPage = () => (
 	<div className="w-full">

@@ -1,9 +1,14 @@
 import React, { Suspense } from 'react';
+import { type Metadata } from 'next';
 
 import { Ads } from '@/components/Ads';
 import { CategoriesFetchFilter } from '@/components/CategoriesFetchFilter';
 import { LeftFilter } from '@/components/LeftFilter';
 import { LeftFilterProvider } from '@/components/LeftFilterProvider';
+
+export const metadata: Metadata = {
+	title: 'Home'
+};
 
 const Home = () => (
 	<LeftFilterProvider>
