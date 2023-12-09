@@ -1,9 +1,14 @@
 'use client';
 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { type Metadata } from 'next';
 
 import Spinner from '@/components/Spinner';
 import { ChangeUserNameDialog } from '@/components/ChangeUserNameDialog';
+
+export const metadata: Metadata = {
+	title: 'My Profile'
+};
 
 const MyProfilePage = () => {
 	const { data, status } = useSession();

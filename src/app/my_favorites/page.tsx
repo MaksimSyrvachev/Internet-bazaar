@@ -1,10 +1,15 @@
 import { Suspense } from 'react';
+import { type Metadata } from 'next';
 
 import { Favorites } from '@/components/Favorites';
 import { CategoriesFetchFilter } from '@/components/CategoriesFetchFilter';
 import { LeftFilter } from '@/components/LeftFilter';
 import { LeftFilterProvider } from '@/components/LeftFilterProvider';
 import { AuthCheck } from '@/components/AuthCheck';
+
+export const metadata: Metadata = {
+	title: 'My Favorites'
+};
 
 const MyFavoritesPage = () => (
 	<AuthCheck>
