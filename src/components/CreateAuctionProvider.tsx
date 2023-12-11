@@ -136,7 +136,7 @@ export const CreateAuctionProvider = ({ children }: Props) => {
 							<br />
 						)}
 
-						<label htmlFor="name">Duration</label>
+						<label htmlFor="name">Duration(In hours)</label>
 						<select
 							className="w-96 rounded-lg bg-slate-50 px-2 py-1 shadow"
 							{...methods.register('duration')}
