@@ -2,7 +2,14 @@ import nodemailer from 'nodemailer';
 
 import { type SendingEmail } from '@/types/sendingEmail';
 
-export const sendEmail = async (email: SendingEmail) => {
+type DataEmail = {
+	from: string | undefined;
+	to: string;
+	subject: string;
+	text: string;
+};
+
+const transport = async (data: DataEmail) => {
 	const transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
@@ -11,6 +18,20 @@ export const sendEmail = async (email: SendingEmail) => {
 		}
 	});
 
+	return await new Promise((resolve, _) => {
+		transporter.sendMail(data, (error, _) => {
+			if (error) {
+				console.log(error);
+				resolve(false);
+			} else {
+				console.log('Email sent');
+				resolve(true);
+			}
+		});
+	});
+};
+
+export const sendEmail = async (email: SendingEmail) => {
 	const data = {
 		from: process.env.EMAIL,
 		to: email.to,
@@ -18,27 +39,12 @@ export const sendEmail = async (email: SendingEmail) => {
 		text: `${email.from} wrote: \n\n ${email.text} \n\n Please reply applicant at this email: ${email.from}`
 	};
 
-	await new Promise((resolve, reject) => {
-		transporter.sendMail(data, (error, _) => {
-			if (error) {
-				console.log(error);
-				throw new Error();
-			} else {
-				console.log('Email sent');
-			}
-		});
-	});
+	if (!(await transport(data))) {
+		new Error();
+	}
 };
 
 export const sendEmailWinner = async (email: SendingEmail) => {
-	const transporter = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: process.env.EMAIL,
-			pass: process.env.PASS
-		}
-	});
-
 	const data = {
 		from: process.env.EMAIL,
 		to: email.to,
@@ -46,27 +52,12 @@ export const sendEmailWinner = async (email: SendingEmail) => {
 		text: `Please contact seller at this email address ${email.from}`
 	};
 
-	await new Promise((resolve, reject) => {
-		transporter.sendMail(data, (error, _) => {
-			if (error) {
-				console.log(error);
-				throw new Error();
-			} else {
-				console.log('Email sent');
-			}
-		});
-	});
+	if (!(await transport(data))) {
+		new Error();
+	}
 };
 
 export const sendEmailToSeller = async (email: SendingEmail) => {
-	const transporter = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: process.env.EMAIL,
-			pass: process.env.PASS
-		}
-	});
-
 	const data = {
 		from: process.env.EMAIL,
 		to: email.to,
@@ -74,27 +65,12 @@ export const sendEmailToSeller = async (email: SendingEmail) => {
 		text: `Winner -${email.from}- will contact you.`
 	};
 
-	await new Promise((resolve, reject) => {
-		transporter.sendMail(data, (error, _) => {
-			if (error) {
-				console.log(error);
-				throw new Error();
-			} else {
-				console.log('Email sent');
-			}
-		});
-	});
+	if (!(await transport(data))) {
+		new Error();
+	}
 };
 
 export const sendEmailNoWinner = async (email: SendingEmail) => {
-	const transporter = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: process.env.EMAIL,
-			pass: process.env.PASS
-		}
-	});
-
 	const data = {
 		from: process.env.EMAIL,
 		to: email.to,
@@ -102,14 +78,7 @@ export const sendEmailNoWinner = async (email: SendingEmail) => {
 		text: `We are sorry, but your auction has not been auctioned. You can now delete auction or create new one.`
 	};
 
-	await new Promise((resolve, reject) => {
-		transporter.sendMail(data, (error, _) => {
-			if (error) {
-				console.log(error);
-				throw new Error();
-			} else {
-				console.log('Email sent');
-			}
-		});
-	});
+	if (!(await transport(data))) {
+		new Error();
+	}
 };
