@@ -88,6 +88,7 @@ model Auction {
   description  String?
   image_URL    String?
   deadlineTime BigInt
+  sent         Boolean  @default(false)
   author       User     @relation(fields: [authorId], references: [id])
   authorId     String
   category     Category @relation(fields: [categoryId], references: [id])

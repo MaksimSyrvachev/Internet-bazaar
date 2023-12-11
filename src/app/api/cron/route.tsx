@@ -7,12 +7,7 @@ import {
 } from '@/server/sendEmail';
 
 export const GET = async () => {
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	const lowerBound = today.getTime();
-
-	today.setHours(23, 59, 59, 0);
-	const upperBound = today.getTime();
+	const currentTime = new Date().getTime();
 
 	const auctions = await db.auction.findMany({
 		include: {
@@ -29,13 +24,22 @@ export const GET = async () => {
 		},
 		where: {
 			deadlineTime: {
-				gte: lowerBound,
-				lte: upperBound
-			}
+				lte: currentTime
+			},
+			sent: false
 		}
 	});
 
 	auctions.map(async auction => {
+		await db.auction.update({
+			where: {
+				id: auction.id
+			},
+			data: {
+				sent: true
+			}
+		});
+
 		if (auction.bids[0].bidderId === auction.author.id) {
 			if (auction.author.email !== null) {
 				const email: SendingEmail = {
