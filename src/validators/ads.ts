@@ -39,7 +39,6 @@ export const postAdSchema = adSchema.omit({
 
 export const putAdSchema = adSchema.omit({
 	authorId: true,
-	categoryId: true,
 	updatedAt: true,
 	publishedAt: true
 });

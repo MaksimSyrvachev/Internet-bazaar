@@ -40,7 +40,8 @@ export const PUT = async (request: Request) => {
 				title: result.data.title,
 				description: result.data.description,
 				price: result.data.price,
-				image_URL: result.data.image_URL
+				image_URL: result.data.image_URL,
+				categoryId: result.data.categoryId
 			}
 		});
 		return Response.json(updatedAd);

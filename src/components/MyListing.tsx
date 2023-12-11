@@ -19,7 +19,7 @@ export const MyListing = () => {
 
 	if (isPending) {
 		return (
-			<div className="mt-2 flex items-center justify-center">
+			<div className="mt-2 flex w-full items-center justify-center">
 				<Spinner />
 			</div>
 		);
