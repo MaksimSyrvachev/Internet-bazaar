@@ -15,6 +15,8 @@ import { BidDialog } from '@/components/BidDialog';
 
 import default_img from '../../public/default_img.jpg';
 
+import Spinner from './Spinner';
+
 type Props = {
 	ad?: AdModel;
 	auction?: AuctionModel;
@@ -91,11 +93,17 @@ export const AdOrAuction = (props: Props) => {
 			{props.ad && (
 				<>
 					<div className="flex w-3/12 items-center justify-start p-2 ">
-						<div>Price: {props.ad.price ?? 'By agreement'}</div>
+						<div>Price: {props.ad.price ?? 'By agreement'} €</div>
 					</div>
 					<div className="flex w-2/12 items-center justify-center ">
 						<button onClick={() => handleCklickFavorite()}>
-							{isFavorite ? <FaHeart size={25} /> : <CiHeart size={30} />}
+							{favoriteMutation.isPending ? (
+								<Spinner />
+							) : isFavorite ? (
+								<FaHeart size={25} />
+							) : (
+								<CiHeart size={30} />
+							)}
 						</button>
 					</div>
 				</>
@@ -105,7 +113,7 @@ export const AdOrAuction = (props: Props) => {
 					<div className="flex w-3/12 flex-col justify-center pr-2">
 						<div className="flex justify-between ">
 							<p className="p-2">
-								Highest bid: {props.auction.bids[0].amount}$
+								Highest bid: {props.auction.bids[0].amount} €
 							</p>
 						</div>
 						<div>
@@ -120,7 +128,13 @@ export const AdOrAuction = (props: Props) => {
 					</div>
 					<div className="flex w-2/12 items-center justify-center ">
 						<button onClick={() => handleCklickFavorite()}>
-							{isFavorite ? <FaHeart size={25} /> : <CiHeart size={30} />}
+							{favoriteMutation.isPending ? (
+								<Spinner />
+							) : isFavorite ? (
+								<FaHeart size={25} />
+							) : (
+								<CiHeart size={30} />
+							)}
 						</button>
 					</div>
 				</>

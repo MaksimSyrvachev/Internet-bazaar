@@ -23,6 +23,7 @@ export const useFilter = (
 	useEffect(() => {
 		setSearchFilter('');
 		setCategorySelected('');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
