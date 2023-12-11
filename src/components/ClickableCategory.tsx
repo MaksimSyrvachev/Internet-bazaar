@@ -16,16 +16,16 @@ const ClickableCategory = (props: Props) => {
 
 	return (
 		<div>
-			{categorySelected === props.category.id? (
+			{categorySelected === props.category.id ? (
 				<button
-					className="bg-selectedPrimary underline p-0.5 mt-0.5 rounded hover:bg-hoverPrimary hover:rounded"
+					className="mt-0.5 rounded bg-selectedPrimary p-0.5 underline hover:rounded hover:bg-hoverPrimary"
 					onClick={() => setCategorySelected(props.category.id)}
 				>
 					{props.category.name}
 				</button>
 			) : (
 				<button
-					className="hover:underline p-0.5 mt-0.5 hover:bg-hoverPrimary hover:rounded"
+					className="mt-0.5 p-0.5 hover:rounded hover:bg-hoverPrimary hover:underline"
 					onClick={() => setCategorySelected(props.category.id)}
 				>
 					{props.category.name}
