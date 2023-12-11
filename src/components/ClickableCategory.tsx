@@ -10,15 +10,28 @@ type Props = {
 };
 
 const ClickableCategory = (props: Props) => {
-	const [_, setCategorySelected] = useContext(CategorySelectedContext);
+	const [categorySelected, setCategorySelected] = useContext(
+		CategorySelectedContext
+	);
 
 	return (
-		<button
-			className="underline"
-			onClick={() => setCategorySelected(props.category.id)}
-		>
-			{props.category.name}
-		</button>
+		<div>
+			{categorySelected === props.category.id? (
+				<button
+					className="bg-selectedPrimary underline p-0.5 mt-0.5 rounded hover:bg-hoverPrimary hover:rounded"
+					onClick={() => setCategorySelected(props.category.id)}
+				>
+					{props.category.name}
+				</button>
+			) : (
+				<button
+					className="hover:underline p-0.5 mt-0.5 hover:bg-hoverPrimary hover:rounded"
+					onClick={() => setCategorySelected(props.category.id)}
+				>
+					{props.category.name}
+				</button>
+			)}
+		</div>
 	);
 };
 
