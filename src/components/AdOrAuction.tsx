@@ -11,6 +11,7 @@ import { type Ad as AdModel } from '@/types/ads';
 import { type AuctionWithBid as AuctionModel } from '@/types/auctions';
 import { AuctionTimeLeft } from '@/components/AuctionTimeLeft';
 import { favoriteFunc } from '@/fetch/deletePutFavorite';
+import { BidDialog } from '@/components/BidDialog';
 
 import default_img from '../../public/default_img.jpg';
 
@@ -127,11 +128,7 @@ export const AdOrAuction = (props: Props) => {
 			<div className="flex items-center justify-center">
 				<div className="flex-col space-y-1">
 					{props.auction && isLoggedIn && !isCreator && (
-						<div className="flex items-center justify-center">
-							<button className="rounded-2xl p-2 underline hover:bg-selectedPrimary">
-								Bid
-							</button>
-						</div>
+						<BidDialog auction={props.auction} />
 					)}
 					<button
 						className="rounded-2xl p-1 underline hover:bg-selectedPrimary"
