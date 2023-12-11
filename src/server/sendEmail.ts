@@ -18,13 +18,15 @@ export const sendEmail = async (email: SendingEmail) => {
 		text: `${email.from} wrote: \n\n ${email.text} \n\n Please reply applicant at this email: ${email.from}`
 	};
 
-	transporter.sendMail(data, (error, _) => {
-		if (error) {
-			console.log(error);
-			throw new Error();
-		} else {
-			console.log('Email sent');
-		}
+	await new Promise((resolve, reject) => {
+		transporter.sendMail(data, (error, _) => {
+			if (error) {
+				console.log(error);
+				throw new Error();
+			} else {
+				console.log('Email sent');
+			}
+		});
 	});
 };
 
@@ -44,13 +46,15 @@ export const sendEmailWinner = async (email: SendingEmail) => {
 		text: `Please contact seller at this email address ${email.from}`
 	};
 
-	transporter.sendMail(data, (error, _) => {
-		if (error) {
-			console.log(error);
-			throw new Error();
-		} else {
-			console.log('Email to winner sent');
-		}
+	await new Promise((resolve, reject) => {
+		transporter.sendMail(data, (error, _) => {
+			if (error) {
+				console.log(error);
+				throw new Error();
+			} else {
+				console.log('Email sent');
+			}
+		});
 	});
 };
 
@@ -70,13 +74,15 @@ export const sendEmailToSeller = async (email: SendingEmail) => {
 		text: `Winner -${email.from}- will contact you.`
 	};
 
-	transporter.sendMail(data, (error, _) => {
-		if (error) {
-			console.log(error);
-			throw new Error();
-		} else {
-			console.log('Email to seller sent');
-		}
+	await new Promise((resolve, reject) => {
+		transporter.sendMail(data, (error, _) => {
+			if (error) {
+				console.log(error);
+				throw new Error();
+			} else {
+				console.log('Email sent');
+			}
+		});
 	});
 };
 
@@ -96,12 +102,14 @@ export const sendEmailNoWinner = async (email: SendingEmail) => {
 		text: `We are sorry, but your auction has not been auctioned. You can now delete auction or create new one.`
 	};
 
-	transporter.sendMail(data, (error, _) => {
-		if (error) {
-			console.log(error);
-			throw new Error();
-		} else {
-			console.log('Email to seller sent - no winner');
-		}
+	await new Promise((resolve, reject) => {
+		transporter.sendMail(data, (error, _) => {
+			if (error) {
+				console.log(error);
+				throw new Error();
+			} else {
+				console.log('Email sent');
+			}
+		});
 	});
 };
