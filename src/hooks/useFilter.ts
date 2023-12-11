@@ -23,11 +23,16 @@ export const useFilter = (
 	useEffect(() => {
 		setSearchFilter('');
 		setCategorySelected('');
-	});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		if (auctionsOrAds) {
-			if (searchFilter !== undefined && searchFilter !== '') {
+			if (
+				searchFilter !== undefined &&
+				searchFilter !== '' &&
+				searchFilter !== undefined
+			) {
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				const resultAuctionsOrAds: AuctionWithBid[] | Ad[] =
