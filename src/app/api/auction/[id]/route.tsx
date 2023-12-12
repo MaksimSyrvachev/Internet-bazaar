@@ -35,6 +35,12 @@ export const DELETE = async (
 		return new Response(null, { status: 500 });
 	}
 
+	if (!auction.sent) {
+		return new Response('The auction result has not yet been sent', {
+			status: 500
+		});
+	}
+
 	auction = await db.auction.delete({
 		where: {
 			id: params.id
